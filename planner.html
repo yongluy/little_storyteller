@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>每日计划 · 小故事家</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1a2e;--paper:#fdfaf4;--warm:#f5ede0;--accent:#e07b39;--accent2:#3a7bd5;--accent3:#2eaa6e;--purple:#9b59b6;--muted:#7a6f63;--border:rgba(26,26,46,0.1);--radius:16px;--shadow:0 4px 20px rgba(26,26,46,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;overflow-x:hidden;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 10% 20%,rgba(224,123,57,.05) 0%,transparent 45%),radial-gradient(circle at 90% 80%,rgba(58,123,213,.05) 0%,transparent 45%);pointer-events:none;z-index:0}
+.container{max-width:860px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.04)}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(253,250,244,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:11px 20px}
+.nav-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.nav-link{font-size:.76rem;font-family:'ZCOOL XiaoWei',serif;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:50px;transition:background .2s,color .2s}
+.nav-link:hover{background:var(--warm);color:var(--ink)}
+.nav-link.cur{background:var(--accent);color:#fff}
+
+
+/* PAGE HEADER */
+.page-header{padding:44px 20px 32px;text-align:center}
+.page-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:8px}
+.page-sub{font-size:.9rem;color:var(--muted);line-height:1.8;max-width:480px;margin:0 auto}
+.divider{height:1px;background:var(--border);margin:0}
+
+/* SECTION */
+.section{padding:40px 0}
+.sec-title{font-family:'Ma Shan Zheng',cursive;font-size:1.5rem;margin-bottom:6px}
+.sec-sub{font-size:.85rem;color:var(--muted);margin-bottom:22px;line-height:1.7}
+
+/* GRADE SELECTOR */
+.grade-tabs{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap}
+.gtab{background:#fff;border:1.5px solid var(--border);border-radius:50px;padding:7px 18px;font-family:'ZCOOL XiaoWei',serif;font-size:.82rem;cursor:pointer;transition:all .2s;color:var(--muted)}
+.gtab:hover{border-color:var(--accent);color:var(--accent)}
+.gtab.on{color:#fff}
+.gtab-1.on{background:#e07b39;border-color:#e07b39}
+.gtab-2.on{background:#3a7bd5;border-color:#3a7bd5}
+.gtab-3.on{background:#2eaa6e;border-color:#2eaa6e}
+
+/* WEEKLY PLAN */
+.week-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:12px;margin-bottom:24px}
+.day-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);animation:fadeUp .4s ease backwards;transition:transform .2s,box-shadow .2s;cursor:pointer;position:relative}
+.day-card:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(26,26,46,.1)}
+.day-card.done{opacity:.65}
+.day-card.done::after{content:'✓';position:absolute;top:10px;right:12px;font-size:1rem;color:var(--accent3);font-weight:bold}
+.day-label{font-family:'ZCOOL XiaoWei',serif;font-size:.7rem;letter-spacing:1.5px;margin-bottom:6px}
+.day-emoji{font-size:1.8rem;display:block;margin-bottom:6px}
+.day-story{font-family:'Ma Shan Zheng',cursive;font-size:1rem;margin-bottom:5px;line-height:1.3}
+.day-focus{font-size:.76rem;color:var(--muted);line-height:1.5}
+.day-dim{display:inline-block;font-size:.65rem;font-family:'ZCOOL XiaoWei',serif;padding:1px 7px;border-radius:50px;margin-top:6px}
+
+/* TIMER */
+.timer-card{background:#fff;border:1px solid var(--border);border-radius:20px;padding:28px;box-shadow:var(--shadow);text-align:center;max-width:420px;margin:0 auto}
+.timer-label{font-family:'ZCOOL XiaoWei',serif;font-size:.82rem;color:var(--muted);margin-bottom:6px;letter-spacing:1px}
+.timer-display{font-family:'Ma Shan Zheng',cursive;font-size:4rem;color:var(--ink);line-height:1;margin-bottom:6px;letter-spacing:4px}
+.timer-display.running{color:var(--accent);animation:pulse 1s ease-in-out infinite}
+.timer-phase{font-size:.82rem;color:var(--muted);margin-bottom:20px;min-height:1.2em}
+.timer-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.tbtn{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;padding:9px 22px;border-radius:50px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--ink)}
+.tbtn:hover{border-color:var(--accent);color:var(--accent)}
+.tbtn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.tbtn.primary:hover{opacity:.85}
+.tbtn.danger{background:#e05656;border-color:#e05656;color:#fff}
+.tbtn.danger:hover{opacity:.85}
+.timer-progress{margin-top:18px;height:6px;background:var(--warm);border-radius:50px;overflow:hidden}
+.timer-bar{height:100%;background:var(--accent);border-radius:50px;transition:width .5s linear;width:0%}
+
+/* PHASES */
+.phases{display:flex;gap:8px;margin-bottom:24px;flex-wrap:wrap;justify-content:center}
+.phase-item{display:flex;align-items:center;gap:6px;background:var(--warm);border-radius:8px;padding:6px 12px;font-size:.78rem}
+.phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+
+/* PROGRESS */
+.progress-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:24px}
+.prog-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow)}
+.prog-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.prog-name{font-family:'ZCOOL XiaoWei',serif;font-size:.88rem}
+.prog-val{font-family:'Ma Shan Zheng',cursive;font-size:.9rem;color:var(--accent)}
+.prog-bar-bg{height:8px;background:var(--warm);border-radius:50px;overflow:hidden}
+.prog-bar{height:100%;border-radius:50px;transition:width .8s ease}
+.prog-days{font-size:.72rem;color:var(--muted);margin-top:5px}
+
+/* STREAK */
+.streak-row{display:flex;align-items:center;gap:16px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px 22px;box-shadow:var(--shadow);margin-bottom:20px}
+.streak-num{font-family:'Ma Shan Zheng',cursive;font-size:2.8rem;color:var(--accent);line-height:1}
+.streak-info{flex:1}
+.streak-title{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;margin-bottom:3px}
+.streak-sub{font-size:.78rem;color:var(--muted);line-height:1.5}
+.streak-fire{font-size:2rem}
+
+/* CALENDAR */
+.cal-wrap{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:20px}
+.cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cal-title{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem}
+.cal-nav{background:none;border:1px solid var(--border);border-radius:8px;padding:4px 10px;cursor:pointer;font-family:'ZCOOL XiaoWei',serif;font-size:.78rem;color:var(--muted);transition:all .2s}
+.cal-nav:hover{border-color:var(--accent);color:var(--accent)}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}
+.cal-dow{font-size:.68rem;color:var(--muted);font-family:'ZCOOL XiaoWei',serif;padding:4px 0}
+.cal-day{width:100%;aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.78rem;cursor:pointer;transition:all .2s;border:1px solid transparent}
+.cal-day:hover{background:var(--warm)}
+.cal-day.done{background:var(--accent3);color:#fff}
+.cal-day.today{border-color:var(--accent);font-weight:bold;color:var(--accent)}
+.cal-day.empty{opacity:0;pointer-events:none}
+
+/* BADGES */
+.badge-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-top:4px}
+.badge{background:#fff;border:1px solid var(--border);border-radius:14px;padding:14px 10px;text-align:center;box-shadow:var(--shadow);transition:transform .2s}
+.badge:hover{transform:translateY(-2px)}
+.badge.locked{opacity:.35;filter:grayscale(1)}
+.badge-emoji{font-size:2rem;display:block;margin-bottom:6px}
+.badge-name{font-family:'ZCOOL XiaoWei',serif;font-size:.78rem;color:var(--ink);margin-bottom:2px}
+.badge-desc{font-size:.68rem;color:var(--muted);line-height:1.4}
+
+/* BTNS */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.action-btn{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;padding:9px 20px;border-radius:50px;border:1.5px solid var(--border);background:#fff;cursor:pointer;transition:all .2s;color:var(--ink);display:flex;align-items:center;gap:6px}
+.action-btn:hover{border-color:var(--accent);color:var(--accent)}
+.action-btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.action-btn.primary:hover{opacity:.85}
+
+/* TIPS */
+.tips-box{background:linear-gradient(135deg,#fffbf5,#fff5ee);border:1px solid rgba(224,123,57,.18);border-radius:var(--radius);padding:20px 24px;margin-top:16px}
+.tips-box h3{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;color:var(--accent);margin-bottom:12px}
+.tip-item{display:flex;gap:8px;font-size:.84rem;line-height:1.7;margin-bottom:6px}
+.tip-dot{width:18px;height:18px;border-radius:50%;background:var(--accent);color:#fff;font-size:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:3px;font-family:'Ma Shan Zheng',cursive}
+
+footer{text-align:center;padding:32px 20px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--border);margin-top:20px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* ── MOBILE NAV FIX ── */
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:1.1rem;color:var(--ink)}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,10,20,.45);z-index:999}
+.mobile-menu.open{display:block}
+.mobile-menu-inner{position:absolute;top:0;right:0;width:220px;height:100%;background:var(--paper);padding:60px 20px 20px;box-shadow:-4px 0 24px rgba(10,10,20,.12);display:flex;flex-direction:column;gap:6px}
+.mobile-menu-inner a{font-family:'ZCOOL XiaoWei',serif;font-size:1rem;color:var(--ink);text-decoration:none;padding:10px 14px;border-radius:10px;transition:background .2s}
+.mobile-menu-inner a:hover,.mobile-menu-inner a.cur{background:var(--warm)}
+.mobile-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)}
+@media(max-width:560px){
+  .nav-links{display:none!important}
+  .hamburger{display:block}
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">📖 小故事家</a>
+    <button class="hamburger" onclick="openMenu()" aria-label="菜单">☰</button>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">首页</a>
+      <a href="grade1-2.html" class="nav-link">1–2年级</a>
+      <a href="grade3-4.html" class="nav-link">3–4年级</a>
+      <a href="grade5-6.html" class="nav-link">5–6年级</a>
+      <a href="planner.html" class="nav-link cur">每日计划</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <div class="page-title">📅 每日故事计划</div>
+    <div class="page-sub">每天10分钟，一个故事，一次练习。用计时器控制节奏，用日历记录坚持，用徽章激励进步。</div>
+  </div>
+</div>
+<div class="divider"></div>
+
+<!-- ── SECTION 1: WEEKLY PLAN ── -->
+<section class="section">
+  <div class="container">
+    <div class="sec-title">🗓️ 本周故事安排</div>
+    <div class="sec-sub">每个年级段都有推荐的每周节奏。家长可以根据孩子进度调整。</div>
+
+    <div class="grade-tabs">
+      <button class="gtab gtab-1 on" onclick="switchGrade(1,this)">🌱 1–2年级</button>
+      <button class="gtab gtab-2" onclick="switchGrade(2,this)">🌿 3–4年级</button>
+      <button class="gtab gtab-3" onclick="switchGrade(3,this)">🌳 5–6年级</button>
+    </div>
+
+    <div id="week-grid" class="week-grid"></div>
+
+    <div class="tips-box">
+      <h3 id="tips-title">💡 1–2年级使用节奏</h3>
+      <div id="tips-body">
+        <div class="tip-item"><div class="tip-dot">一</div><span><strong>周一、三、五</strong>：家长讲故事，孩子听，每步提问一次</span></div>
+        <div class="tip-item"><div class="tip-dot">二</div><span><strong>周二、四</strong>：孩子复述，家长只提示「然后呢？」</span></div>
+        <div class="tip-item"><div class="tip-dot">六</div><span><strong>周六</strong>：孩子自选本周最喜欢的故事，完整讲一遍</span></div>
+        <div class="tip-item"><div class="tip-dot">日</div><span><strong>周日</strong>：休息，或者孩子对玩具讲一个自编小故事</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SECTION 2: TIMER ── -->
+<section class="section">
+  <div class="container">
+    <div class="sec-title" style="text-align:center">⏱️ 故事练习计时器</div>
+    <div class="sec-sub" style="text-align:center">按照三个阶段控制练习节奏，轻松不拖拉。</div>
+
+    <div class="phases" style="margin-bottom:20px">
+      <div class="phase-item"><div class="phase-dot" style="background:#e07b39"></div><span>阶段一：家长讲故事 3分钟</span></div>
+      <div class="phase-item"><div class="phase-dot" style="background:#3a7bd5"></div><span>阶段二：提问互动 3分钟</span></div>
+      <div class="phase-item"><div class="phase-dot" style="background:#2eaa6e"></div><span>阶段三：孩子复述 4分钟</span></div>
+    </div>
+
+    <div class="timer-card">
+      <div class="timer-label" id="timer-label">准备开始</div>
+      <div class="timer-display" id="timer-display">10:00</div>
+      <div class="timer-phase" id="timer-phase">点击「开始」按钮启动计时</div>
+      <div class="timer-btns">
+        <button class="tbtn primary" id="btn-start" onclick="startTimer()">▶ 开始</button>
+        <button class="tbtn" id="btn-pause" onclick="pauseTimer()" style="display:none">⏸ 暂停</button>
+        <button class="tbtn" id="btn-resume" onclick="resumeTimer()" style="display:none">▶ 继续</button>
+        <button class="tbtn danger" id="btn-reset" onclick="resetTimer()" style="display:none">↺ 重置</button>
+      </div>
+      <div class="timer-progress"><div class="timer-bar" id="timer-bar"></div></div>
+    </div>
+
+    <div style="text-align:center;margin-top:16px">
+      <div style="font-size:.78rem;color:var(--muted)">可自定义时间（分钟）：
+        <input type="number" id="custom-p1" value="3" min="1" max="30" style="width:44px;text-align:center;border:1px solid var(--border);border-radius:6px;padding:3px 4px;font-family:'ZCOOL XiaoWei',serif;font-size:.78rem"> 讲故事 ·
+        <input type="number" id="custom-p2" value="3" min="1" max="30" style="width:44px;text-align:center;border:1px solid var(--border);border-radius:6px;padding:3px 4px;font-family:'ZCOOL XiaoWei',serif;font-size:.78rem"> 提问 ·
+        <input type="number" id="custom-p3" value="4" min="1" max="30" style="width:44px;text-align:center;border:1px solid var(--border);border-radius:6px;padding:3px 4px;font-family:'ZCOOL XiaoWei',serif;font-size:.78rem"> 复述
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SECTION 3: PROGRESS ── -->
+<section class="section">
+  <div class="container">
+    <div class="sec-title">🌱 孩子成长进度</div>
+    <div class="sec-sub">记录孩子在六个维度上的表达能力成长。每次练习后，点击「今天进步了」更新进度。</div>
+
+    <!-- Streak -->
+    <div class="streak-row">
+      <div>
+        <div style="font-size:.72rem;color:var(--muted);font-family:'ZCOOL XiaoWei',serif;margin-bottom:2px">连续坚持</div>
+        <div class="streak-num" id="streak-num">0</div>
+        <div style="font-size:.72rem;color:var(--muted)">天</div>
+      </div>
+      <div class="streak-info">
+        <div class="streak-title" id="streak-title">还未开始</div>
+        <div class="streak-sub" id="streak-sub">每天完成一个故事练习，积累连续天数</div>
+      </div>
+      <div class="streak-fire" id="streak-fire">🌱</div>
+    </div>
+
+    <!-- Progress bars -->
+    <div class="progress-grid" id="prog-grid"></div>
+
+    <!-- Action -->
+    <div class="btn-row">
+      <button class="action-btn primary" onclick="recordToday()">✅ 今天完成了！记录进步</button>
+      <button class="action-btn" onclick="resetProgress()">↺ 重置进度</button>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SECTION 4: CALENDAR ── -->
+<section class="section">
+  <div class="container">
+    <div class="sec-title">📆 打卡日历</div>
+    <div class="sec-sub">点击「今天完成了」后，今天会在日历上标记为绿色。坚持每天打卡！</div>
+
+    <div class="cal-wrap">
+      <div class="cal-header">
+        <button class="cal-nav" onclick="prevMonth()">← 上月</button>
+        <div class="cal-title" id="cal-title"></div>
+        <button class="cal-nav" onclick="nextMonth()">下月 →</button>
+      </div>
+      <div class="cal-grid" id="cal-grid"></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ── SECTION 5: BADGES ── -->
+<section class="section">
+  <div class="container">
+    <div class="sec-title">🏅 成就徽章</div>
+    <div class="sec-sub">随着练习天数增加，徽章会自动解锁。收集全部徽章吧！</div>
+    <div class="badge-grid" id="badge-grid"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <p><a href="index.html">← 返回首页</a> · 小故事家 · 每日计划与进度追踪</p>
+    <p style="margin-top:5px;font-size:.72rem">进度数据保存在本地浏览器，清除浏览器缓存会重置数据</p>
+  </div>
+</footer>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────
+const WEEK_PLANS = {
+  1: [
+    {day:"周一",emoji:"🐛",story:"毛毛虫的翅膀梦",dim:"🌱 自然",focus:"家长讲，孩子听；提问：主角是谁？",color:"#fff5ee"},
+    {day:"周二",emoji:"🦁",story:"不敢咆哮的小狮子",dim:"💪 勇气",focus:"孩子复述步骤①②",color:"#fff5ee"},
+    {day:"周三",emoji:"🐻",story:"两只小熊的玩具",dim:"🤝 友谊",focus:"家长讲；提问：他们怎么解决的？",color:"#fff5ee"},
+    {day:"周四",emoji:"😤",story:"小兔子发脾气了",dim:"❤️ 情绪",focus:"孩子复述完整三步",color:"#fff5ee"},
+    {day:"周五",emoji:"🥕",story:"谁偷走了胡萝卜",dim:"🧠 逻辑",focus:"家长讲；孩子猜线索",color:"#fff5ee"},
+    {day:"周六",emoji:"🌈",story:"颜色逃跑了",dim:"🎨 创意",focus:"孩子独立讲，不看提示",color:"#fffde7"},
+    {day:"周日",emoji:"✨",story:"自由创作日",dim:"💬 感受",focus:"孩子自编一个小故事",color:"#f3e5f5"},
+  ],
+  2: [
+    {day:"周一",emoji:"🦋",story:"消失的蝴蝶",dim:"🌱 自然",focus:"家长讲全六步；孩子说感受",color:"#eef5ff"},
+    {day:"周二",emoji:"🤝",story:"足球队的裂缝",dim:"🤝 友谊",focus:"轮流讲：家长①②，孩子③④⑤",color:"#eef5ff"},
+    {day:"周三",emoji:"😰",story:"考试前的肚子疼",dim:"❤️ 情绪",focus:"孩子独立讲全部；家长只提问",color:"#eef5ff"},
+    {day:"周四",emoji:"🗺️",story:"地图上的错误",dim:"🧠 逻辑",focus:"重点练习步骤③④转折表达",color:"#eef5ff"},
+    {day:"周五",emoji:"🎭",story:"改写结局的魔法书",dim:"🎨 创意",focus:"孩子讲完后，改写一个结局",color:"#eef5ff"},
+    {day:"周六",emoji:"💻",story:"AI帮我写作业",dim:"🖥️ 科技",focus:"六步全讲 + 说自己的观点",color:"#fffde7"},
+    {day:"周日",emoji:"✨",story:"自由讨论日",dim:"💬 感受",focus:"聊本周最有共鸣的一个故事",color:"#f3e5f5"},
+  ],
+  3: [
+    {day:"周一",emoji:"🌲",story:"一棵树的一百年",dim:"🌱 自然",focus:"六步+元认知：为什么这样结构？",color:"#eefff5"},
+    {day:"周二",emoji:"🎭",story:"谁来讲这个故事",dim:"🎨 创意",focus:"两个视角轮流讲，对比差异",color:"#eefff5"},
+    {day:"周三",emoji:"📰",story:"新闻是真的吗",dim:"🖥️ 科技",focus:"开放讨论：如何判断信息真假",color:"#eefff5"},
+    {day:"周四",emoji:"💔",story:"安慰的方法",dim:"❤️ 情绪",focus:"孩子独立讲 + 创作挑战",color:"#eefff5"},
+    {day:"周五",emoji:"🗳️",story:"少数人的声音",dim:"⚖️ 公平",focus:"辩论：多数决定公平吗？",color:"#eefff5"},
+    {day:"周六",emoji:"🏺",story:"博物馆里的问题",dim:"🏛️ 历史",focus:"写一篇辩论稿（5–10分钟）",color:"#fffde7"},
+    {day:"周日",emoji:"✨",story:"自由创作日",dim:"✏️ 创作",focus:"孩子自由写或讲一个原创故事",color:"#f3e5f5"},
+  ],
+};
+
+const TIPS = {
+  1: {
+    title:"💡 1–2年级使用节奏",
+    items:[
+      ["一","<strong>周一、三、五</strong>：家长讲故事，孩子听，每步提问一次"],
+      ["二","<strong>周二、四</strong>：孩子复述，家长只提示「然后呢？」"],
+      ["六","<strong>周六</strong>：孩子自选本周最喜欢的故事，完整讲一遍"],
+      ["日","<strong>周日</strong>：休息，或者孩子对玩具讲一个自编小故事"],
+    ]
+  },
+  2: {
+    title:"💡 3–4年级使用节奏",
+    items:[
+      ["一","<strong>周一、三</strong>：家长讲全六步，孩子在步骤间回答提问"],
+      ["二","<strong>周二、四</strong>：轮流接力，家长①②，孩子③④⑤，家长或孩子说⑥"],
+      ["五","<strong>周五</strong>：孩子独立讲，家长全程只提问不插话"],
+      ["六","<strong>周六</strong>：挑战「改写结局」，孩子讲完后自己换个结局"],
+    ]
+  },
+  3: {
+    title:"💡 5–6年级使用节奏",
+    items:[
+      ["一","<strong>周一、三</strong>：孩子独立讲，加上元认知：这个故事为什么这样结构？"],
+      ["二","<strong>周二、四</strong>：开放讨论，重点是「你的观点是什么，为什么」"],
+      ["五","<strong>周五</strong>：完成创作挑战（改写结局或写辩论稿）"],
+      ["六","<strong>周六</strong>：孩子原创一个故事，用六步框架呈现"],
+    ]
+  }
+};
+
+const SKILLS = [
+  {key:"bg",name:"🌍 背景描述",color:"#e07b39"},
+  {key:"prob",name:"😟 问题表达",color:"#e05656"},
+  {key:"action",name:"💡 行动逻辑",color:"#3a7bd5"},
+  {key:"twist",name:"🎢 转折感知",color:"#9b59b6"},
+  {key:"result",name:"🏆 结果总结",color:"#2eaa6e"},
+  {key:"feeling",name:"💬 感受表达",color:"#e8a020"},
+];
+
+const BADGES = [
+  {emoji:"🌱",name:"第一步",desc:"完成第1天",req:1},
+  {emoji:"🌿",name:"初级讲述者",desc:"坚持7天",req:7},
+  {emoji:"🌳",name:"故事小达人",desc:"坚持14天",req:14},
+  {emoji:"🦋",name:"蜕变时刻",desc:"坚持21天",req:21},
+  {emoji:"⭐",name:"故事之星",desc:"坚持30天",req:30},
+  {emoji:"🏆",name:"小故事冠军",desc:"坚持60天",req:60},
+];
+
+const STREAK_LABELS = [
+  [0,"还未开始","每天完成一个故事练习，积累连续天数","🌱"],
+  [1,"出发啦！","已经完成第一天，继续加油！","🌿"],
+  [7,"坚持一周","你已经坚持了一周，太棒了！","🌳"],
+  [14,"两周达人","连续两周，孩子的表达能力在悄悄变化","🦋"],
+  [21,"三周习惯","21天养成习惯，讲故事已经变成日常","⭐"],
+  [30,"一个月冠军","一个月的坚持，你们做到了！","🏆"],
+];
+
+// ── STATE ────────────────────────────────────────────────────────
+function loadState(){
+  return JSON.parse(localStorage.getItem('xgsj_state')||'null') || {
+    streak: 0,
+    lastDate: null,
+    totalDays: 0,
+    doneDates: [],
+    skills: {bg:20,prob:20,action:20,twist:20,result:20,feeling:20},
+  };
+}
+function saveState(s){ localStorage.setItem('xgsj_state', JSON.stringify(s)); }
+
+let state = loadState();
+let currentGrade = 1;
+let calYear, calMonth;
+const today = new Date();
+calYear = today.getFullYear();
+calMonth = today.getMonth();
+
+// ── WEEK PLAN ─────────────────────────────────────────────────────
+function switchGrade(g, btn){
+  currentGrade = g;
+  document.querySelectorAll('.gtab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderWeek();
+  const t = TIPS[g];
+  document.getElementById('tips-title').textContent = t.title;
+  document.getElementById('tips-body').innerHTML = t.items.map(([d,txt])=>
+    `<div class="tip-item"><div class="tip-dot">${d}</div><span>${txt}</span></div>`
+  ).join('');
+}
+
+function renderWeek(){
+  const grid = document.getElementById('week-grid');
+  const plan = WEEK_PLANS[currentGrade];
+  grid.innerHTML = '';
+  plan.forEach((d,i)=>{
+    const div = document.createElement('div');
+    div.className = 'day-card';
+    div.style.background = d.color;
+    div.style.animationDelay = (i*.05)+'s';
+    div.innerHTML = `
+      <div class="day-label">${d.day}</div>
+      <span class="day-emoji">${d.emoji}</span>
+      <div class="day-story">${d.story}</div>
+      <div class="day-dim">${d.dim}</div>
+      <div class="day-focus" style="margin-top:6px">${d.focus}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ── TIMER ─────────────────────────────────────────────────────────
+let timerInterval = null;
+let timerPhases = [];
+let timerPhaseIdx = 0;
+let timerSecondsLeft = 0;
+let timerTotalSeconds = 0;
+let timerRunning = false;
+
+const PHASE_COLORS = ["#e07b39","#3a7bd5","#2eaa6e"];
+const PHASE_NAMES = ["阶段一：家长讲故事","阶段二：提问互动","阶段三：孩子复述"];
+
+function getPhases(){
+  const p1 = parseInt(document.getElementById('custom-p1').value)||3;
+  const p2 = parseInt(document.getElementById('custom-p2').value)||3;
+  const p3 = parseInt(document.getElementById('custom-p3').value)||4;
+  return [p1*60, p2*60, p3*60];
+}
+
+function startTimer(){
+  timerPhases = getPhases();
+  timerPhaseIdx = 0;
+  timerSecondsLeft = timerPhases[0];
+  timerTotalSeconds = timerPhases.reduce((a,b)=>a+b,0);
+  timerRunning = true;
+  document.getElementById('btn-start').style.display='none';
+  document.getElementById('btn-pause').style.display='inline-flex';
+  document.getElementById('btn-reset').style.display='inline-flex';
+  updateTimerUI();
+  timerInterval = setInterval(tickTimer, 1000);
+}
+
+function tickTimer(){
+  if(!timerRunning) return;
+  timerSecondsLeft--;
+  if(timerSecondsLeft <= 0){
+    timerPhaseIdx++;
+    if(timerPhaseIdx >= timerPhases.length){
+      clearInterval(timerInterval);
+      document.getElementById('timer-display').textContent = '完成！';
+      document.getElementById('timer-display').className = 'timer-display';
+      document.getElementById('timer-phase').textContent = '🎉 本次练习完成！记得打卡';
+      document.getElementById('timer-label').textContent = '练习结束';
+      document.getElementById('timer-bar').style.width = '100%';
+      document.getElementById('timer-bar').style.background = '#2eaa6e';
+      document.getElementById('btn-pause').style.display='none';
+      document.getElementById('btn-resume').style.display='none';
+      return;
+    }
+    timerSecondsLeft = timerPhases[timerPhaseIdx];
+  }
+  updateTimerUI();
+}
+
+function updateTimerUI(){
+  const m = Math.floor(timerSecondsLeft/60);
+  const s = timerSecondsLeft%60;
+  document.getElementById('timer-display').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  document.getElementById('timer-display').className = 'timer-display running';
+  document.getElementById('timer-label').textContent = PHASE_NAMES[timerPhaseIdx];
+  document.getElementById('timer-phase').textContent = ['📖 家长用框架讲故事','💬 逐步提问，等孩子回答','🎤 孩子独立复述故事'][timerPhaseIdx];
+  document.getElementById('timer-bar').style.background = PHASE_COLORS[timerPhaseIdx];
+  // progress: elapsed / total
+  const elapsed = timerPhases.slice(0,timerPhaseIdx).reduce((a,b)=>a+b,0) + (timerPhases[timerPhaseIdx]-timerSecondsLeft);
+  document.getElementById('timer-bar').style.width = Math.round(elapsed/timerTotalSeconds*100)+'%';
+}
+
+function pauseTimer(){
+  timerRunning = false;
+  clearInterval(timerInterval);
+  document.getElementById('btn-pause').style.display='none';
+  document.getElementById('btn-resume').style.display='inline-flex';
+  document.getElementById('timer-display').className = 'timer-display';
+}
+
+function resumeTimer(){
+  timerRunning = true;
+  document.getElementById('btn-pause').style.display='inline-flex';
+  document.getElementById('btn-resume').style.display='none';
+  document.getElementById('timer-display').className = 'timer-display running';
+  timerInterval = setInterval(tickTimer, 1000);
+}
+
+function resetTimer(){
+  clearInterval(timerInterval);
+  timerRunning = false;
+  document.getElementById('timer-display').textContent = '10:00';
+  document.getElementById('timer-display').className = 'timer-display';
+  document.getElementById('timer-phase').textContent = '点击「开始」按钮启动计时';
+  document.getElementById('timer-label').textContent = '准备开始';
+  document.getElementById('timer-bar').style.width = '0%';
+  document.getElementById('btn-start').style.display='inline-flex';
+  document.getElementById('btn-pause').style.display='none';
+  document.getElementById('btn-resume').style.display='none';
+  document.getElementById('btn-reset').style.display='none';
+}
+
+// ── PROGRESS ──────────────────────────────────────────────────────
+function renderProgress(){
+  const grid = document.getElementById('prog-grid');
+  grid.innerHTML = '';
+  SKILLS.forEach(sk=>{
+    const val = state.skills[sk.key] || 0;
+    const pct = Math.min(val, 100);
+    const labels = ['初学','入门','进步中','熟练','很棒！','超棒！','故事达人'];
+    const lbl = labels[Math.min(Math.floor(pct/14.3), labels.length-1)];
+    const div = document.createElement('div');
+    div.className = 'prog-card';
+    div.innerHTML = `
+      <div class="prog-label">
+        <span class="prog-name">${sk.name}</span>
+        <span class="prog-val">${lbl}</span>
+      </div>
+      <div class="prog-bar-bg"><div class="prog-bar" style="width:${pct}%;background:${sk.color}"></div></div>
+      <div class="prog-days">累计 ${Math.round(pct/10)} 次进步记录</div>`;
+    grid.appendChild(div);
+  });
+
+  // Streak
+  const n = state.streak;
+  document.getElementById('streak-num').textContent = n;
+  let sl = STREAK_LABELS[0];
+  for(const row of STREAK_LABELS){ if(n >= row[0]) sl = row; }
+  document.getElementById('streak-title').textContent = sl[1];
+  document.getElementById('streak-sub').textContent = sl[2];
+  document.getElementById('streak-fire').textContent = sl[3];
+}
+
+function recordToday(){
+  const todayStr = today.toISOString().split('T')[0];
+  const lastStr = state.lastDate;
+
+  // update done dates
+  if(!state.doneDates.includes(todayStr)){
+    state.doneDates.push(todayStr);
+  }
+
+  // update streak
+  if(lastStr){
+    const last = new Date(lastStr);
+    const diff = Math.round((today - last)/(1000*60*60*24));
+    if(diff === 1){ state.streak++; }
+    else if(diff === 0){ /* same day, no change */ }
+    else { state.streak = 1; }
+  } else {
+    state.streak = 1;
+  }
+  state.lastDate = todayStr;
+  state.totalDays = state.doneDates.length;
+
+  // level up skills
+  Object.keys(state.skills).forEach(k=>{
+    state.skills[k] = Math.min(state.skills[k] + 8, 100);
+  });
+
+  saveState(state);
+  renderProgress();
+  renderCalendar();
+  renderBadges();
+  alert('🎉 太棒了！今天的故事练习已记录！');
+}
+
+function resetProgress(){
+  if(!confirm('确定要重置所有进度吗？此操作不可撤销。')) return;
+  state = {streak:0,lastDate:null,totalDays:0,doneDates:[],skills:{bg:20,prob:20,action:20,twist:20,result:20,feeling:20}};
+  saveState(state);
+  renderProgress();
+  renderCalendar();
+  renderBadges();
+}
+
+// ── CALENDAR ──────────────────────────────────────────────────────
+function renderCalendar(){
+  const title = document.getElementById('cal-title');
+  const grid = document.getElementById('cal-grid');
+  const months = ['一月','二月','三月','四月','五月','六月','七月','八月','九月','十月','十一月','十二月'];
+  title.textContent = `${calYear}年 ${months[calMonth]}`;
+
+  const dows = ['日','一','二','三','四','五','六'];
+  const firstDay = new Date(calYear, calMonth, 1).getDay();
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const todayStr = today.toISOString().split('T')[0];
+
+  let html = dows.map(d=>`<div class="cal-dow">${d}</div>`).join('');
+  for(let i=0;i<firstDay;i++) html += `<div class="cal-day empty"></div>`;
+  for(let d=1;d<=daysInMonth;d++){
+    const ds = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+    const isDone = state.doneDates.includes(ds);
+    const isToday = ds === todayStr;
+    let cls = 'cal-day';
+    if(isDone) cls += ' done';
+    if(isToday) cls += ' today';
+    html += `<div class="${cls}">${d}</div>`;
+  }
+  grid.innerHTML = html;
+}
+
+function prevMonth(){ calMonth--; if(calMonth<0){calMonth=11;calYear--;} renderCalendar(); }
+function nextMonth(){ calMonth++; if(calMonth>11){calMonth=0;calYear++;} renderCalendar(); }
+
+// ── BADGES ────────────────────────────────────────────────────────
+function renderBadges(){
+  const grid = document.getElementById('badge-grid');
+  grid.innerHTML = '';
+  BADGES.forEach(b=>{
+    const unlocked = state.streak >= b.req || state.totalDays >= b.req;
+    const div = document.createElement('div');
+    div.className = 'badge' + (unlocked?'':' locked');
+    div.innerHTML = `<span class="badge-emoji">${b.emoji}</span><div class="badge-name">${b.name}</div><div class="badge-desc">${b.desc}</div>`;
+    grid.appendChild(div);
+  });
+}
+
+// ── INIT ──────────────────────────────────────────────────────────
+renderWeek();
+renderProgress();
+renderCalendar();
+renderBadges();
+</script>
+
+<div class="mobile-menu" id="mobileMenu" onclick="closeMenuOverlay(event)">
+  <div class="mobile-menu-inner">
+    <button class="mobile-close" onclick="closeMenu()">✕</button>
+    <a href="index.html" class="">首页</a>
+    <a href="grade1-2.html" class="">1–2年级</a>
+    <a href="grade3-4.html" class="">3–4年级</a>
+    <a href="grade5-6.html" class="">5–6年级</a>
+    <a href="planner.html" class="cur">每日计划</a>
+  </div>
+</div>
+
+<script>
+function openMenu(){document.getElementById('mobileMenu').classList.add('open');document.body.style.overflow='hidden';}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');document.body.style.overflow='';}
+function closeMenuOverlay(e){if(e.target===document.getElementById('mobileMenu'))closeMenu();}
+</script>
+
+</body>
+</html>

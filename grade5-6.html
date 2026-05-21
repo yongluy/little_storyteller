@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>5–6年级故事库 · 小故事家</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1a2e;--paper:#fdfaf4;--warm:#f0fff4;--accent:#2eaa6e;--muted:#7a6f63;--border:rgba(26,26,46,0.1);--radius:16px;--shadow:0 4px 20px rgba(26,26,46,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(46,170,110,.05) 0%,transparent 50%);pointer-events:none;z-index:0}
+.container{max-width:880px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+nav{position:sticky;top:0;z-index:100;background:rgba(253,250,244,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:11px 20px}
+.nav-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.nav-link{font-size:.76rem;font-family:'ZCOOL XiaoWei',serif;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:50px;transition:background .2s,color .2s}
+.nav-link:hover{background:var(--warm);color:var(--ink)}
+.nav-link.cur{background:var(--accent);color:#fff}
+
+.page-header{padding:44px 20px 32px;text-align:center}
+.grade-badge{display:inline-flex;align-items:center;gap:6px;background:#eefff5;border:1px solid rgba(46,170,110,.25);border-radius:50px;padding:5px 14px;font-family:'ZCOOL XiaoWei',serif;font-size:.76rem;color:var(--accent);letter-spacing:1.5px;margin-bottom:14px}
+.page-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:8px}
+.page-sub{font-size:.9rem;color:var(--muted);line-height:1.8;max-width:500px;margin:0 auto 20px}
+.page-stats{display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
+.ps-num{font-family:'Ma Shan Zheng',cursive;font-size:1.6rem;color:var(--accent);display:block}
+.ps-lbl{font-size:.75rem;color:var(--muted)}
+.framework-mini{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:28px;box-shadow:var(--shadow)}
+.fm-title{font-family:'ZCOOL XiaoWei',serif;font-size:.9rem;color:var(--muted);margin-bottom:10px}
+.fm-steps{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.fm-step{display:flex;align-items:center;gap:5px;background:var(--warm);border-radius:8px;padding:5px 10px;font-size:.78rem}
+.fm-dot{width:18px;height:18px;border-radius:50%;color:#fff;font-size:.65rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.d1{background:#e07b39}.d2{background:#e05656}.d3{background:#3a7bd5}.d4{background:#9b59b6}.d5{background:#2eaa6e}.d6{background:#e8a020}
+.fm-meta{font-size:.78rem;color:var(--muted);line-height:1.6;background:rgba(46,170,110,.06);border-radius:8px;padding:8px 12px}
+.filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+.filter-label{font-size:.8rem;color:var(--muted);font-family:'ZCOOL XiaoWei',serif;margin-right:3px}
+.ftag{background:#fff;border:1px solid var(--border);border-radius:50px;padding:5px 13px;font-size:.78rem;cursor:pointer;transition:all .2s;font-family:'ZCOOL XiaoWei',serif;color:var(--muted)}
+.ftag:hover{border-color:var(--accent);color:var(--accent)}
+.ftag.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.story-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s,box-shadow .2s;animation:fadeUp .4s ease backwards;position:relative}
+.story-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(26,26,46,.11)}
+.story-card.hidden{display:none}
+.sc-num{position:absolute;top:14px;right:14px;font-family:'Ma Shan Zheng',cursive;font-size:.75rem;color:var(--muted);background:var(--warm);border-radius:50px;padding:2px 8px}
+.sc-emoji{font-size:2.2rem;display:block;margin-bottom:8px}
+.sc-dim{display:inline-block;font-size:.68rem;font-family:'ZCOOL XiaoWei',serif;padding:2px 8px;border-radius:50px;margin-bottom:7px}
+.sc-title{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;margin-bottom:6px}
+.sc-preview{font-size:.8rem;color:var(--muted);line-height:1.65;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.sc-tag{font-size:.68rem;background:var(--warm);color:var(--muted);border-radius:5px;padding:2px 6px}
+.sc-open{display:inline-flex;align-items:center;gap:4px;font-size:.76rem;color:var(--accent);font-family:'ZCOOL XiaoWei',serif;margin-top:8px}
+.dim-zr{background:#e8f5e9;color:#2e7d32}.dim-yy{background:#e3f2fd;color:#1565c0}.dim-yq{background:#fce4ec;color:#880e4f}.dim-lj{background:#ede7f6;color:#4527a0}.dim-wh{background:#fff3e0;color:#e65100}.dim-qx{background:#fce4ec;color:#c62828}.dim-jt{background:#f3e5f5;color:#6a1b9a}.dim-kx{background:#e0f2f1;color:#00695c}.dim-cy{background:#fff8e1;color:#f57f17}.dim-gp{background:#efebe9;color:#4e342e}.dim-sz{background:#e8eaf6;color:#283593}.dim-ls{background:#fafafa;color:#424242}
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,10,20,.5);z-index:200;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--paper);border-radius:20px;padding:28px;max-width:660px;width:100%;margin:auto;position:relative;box-shadow:0 20px 60px rgba(10,10,20,.2);animation:fadeUp .3s ease}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--warm);border:none;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.modal-close:hover{background:var(--accent);color:#fff}
+.modal-num{font-size:.75rem;color:var(--muted);margin-bottom:4px;font-family:'ZCOOL XiaoWei',serif}
+.modal-emoji{font-size:2.8rem;display:block;margin-bottom:8px}
+.modal-title{font-family:'Ma Shan Zheng',cursive;font-size:1.7rem;margin-bottom:12px}
+.modal-dim{display:inline-block;font-size:.72rem;font-family:'ZCOOL XiaoWei',serif;padding:3px 10px;border-radius:50px;margin-bottom:16px}
+.story-section{margin-bottom:13px}
+.ss-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding-bottom:5px;border-bottom:1px solid var(--border)}
+.ss-icon{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.8rem;flex-shrink:0;color:#fff}
+.ss-step{font-size:.74rem;color:var(--muted);font-family:'ZCOOL XiaoWei',serif}
+.ss-name{font-family:'ZCOOL XiaoWei',serif;font-size:.92rem}
+.ss-body{font-size:.88rem;line-height:1.85}
+.guide-box{background:#eefff5;border-radius:12px;padding:14px 16px;margin-top:14px}
+.guide-title{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;color:var(--accent);margin-bottom:8px}
+.guide-q{font-size:.83rem;line-height:1.7;margin-bottom:4px}
+.guide-q::before{content:"💬 "}
+.open-q-box{background:#fff8e1;border:1px solid rgba(232,160,32,.2);border-radius:12px;padding:14px 16px;margin-top:10px}
+.oq-title{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;color:#b07800;margin-bottom:8px}
+.oq-item{font-size:.83rem;line-height:1.7;margin-bottom:5px}
+.oq-item::before{content:"🔓 "}
+.create-box{background:#f3e5f5;border:1px solid rgba(106,27,154,.15);border-radius:12px;padding:14px 16px;margin-top:10px}
+.create-title{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;color:#6a1b9a;margin-bottom:8px}
+.create-item{font-size:.83rem;line-height:1.7;margin-bottom:4px}
+.create-item::before{content:"✏️ "}
+.meta-box{background:#e8eaf6;border-radius:12px;padding:12px 15px;margin-top:10px}
+.meta-title{font-family:'ZCOOL XiaoWei',serif;font-size:.82rem;color:#283593;margin-bottom:6px}
+.meta-body{font-size:.8rem;line-height:1.7;color:#283593}
+.modal-nav{display:flex;justify-content:space-between;margin-top:18px;gap:10px}
+.mnav-btn{flex:1;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-family:'ZCOOL XiaoWei',serif;font-size:.82rem;cursor:pointer;color:var(--muted);transition:all .2s;text-align:center}
+.mnav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mnav-btn:disabled{opacity:.35;cursor:default}
+.empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:.9rem}
+footer{text-align:center;padding:32px 20px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--border);margin-top:40px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* ── MOBILE NAV FIX ── */
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:1.1rem;color:var(--ink)}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,10,20,.45);z-index:999}
+.mobile-menu.open{display:block}
+.mobile-menu-inner{position:absolute;top:0;right:0;width:220px;height:100%;background:var(--paper);padding:60px 20px 20px;box-shadow:-4px 0 24px rgba(10,10,20,.12);display:flex;flex-direction:column;gap:6px}
+.mobile-menu-inner a{font-family:'ZCOOL XiaoWei',serif;font-size:1rem;color:var(--ink);text-decoration:none;padding:10px 14px;border-radius:10px;transition:background .2s}
+.mobile-menu-inner a:hover,.mobile-menu-inner a.cur{background:var(--warm)}
+.mobile-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)}
+@media(max-width:560px){
+  .nav-links{display:none!important}
+  .hamburger{display:block}
+}
+
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">📖 小故事家</a>
+    <button class="hamburger" onclick="openMenu()" aria-label="菜单">☰</button>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">首页</a>
+      <a href="grade1-2.html" class="nav-link">1–2年级</a>
+      <a href="grade3-4.html" class="nav-link">3–4年级</a>
+      <a href="grade5-6.html" class="nav-link cur">5–6年级</a>
+      <a href="planner.html" class="nav-link">每日计划</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <div class="grade-badge">🌳 5–6 年级 · 进阶故事家</div>
+    <div class="page-title">30 个深度故事</div>
+    <div class="page-sub">六步框架加上元认知思考，开放式讨论，鼓励改写结局和自由创作。培养独立表达与批判性思维。</div>
+    <div class="page-stats">
+      <div><span class="ps-num">30</span><span class="ps-lbl">个故事</span></div>
+      <div><span class="ps-num">12</span><span class="ps-lbl">个维度</span></div>
+      <div><span class="ps-num">6+</span><span class="ps-lbl">步框架</span></div>
+      <div><span class="ps-num">10–15</span><span class="ps-lbl">分钟/天</span></div>
+    </div>
+  </div>
+</div>
+
+<div style="height:1px;background:var(--border)"></div>
+
+<div style="padding:24px 0 0">
+<div class="container">
+  <div class="framework-mini">
+    <div class="fm-title">📐 本年级框架：六步 + 元认知</div>
+    <div class="fm-steps">
+      <div class="fm-step"><div class="fm-dot d1">①</div><span>🌍 背景</span></div>
+      <div class="fm-step"><div class="fm-dot d2">②</div><span>😟 问题</span></div>
+      <div class="fm-step"><div class="fm-dot d3">③</div><span>💡 行动</span></div>
+      <div class="fm-step"><div class="fm-dot d4">④</div><span>🎢 转折</span></div>
+      <div class="fm-step"><div class="fm-dot d5">⑤</div><span>🏆 结果</span></div>
+      <div class="fm-step"><div class="fm-dot d6">⑥</div><span>💬 感受</span></div>
+    </div>
+    <div class="fm-meta">🧠 <strong>元认知加餐：</strong>每个故事额外提问「这个故事为什么要这样结构？」「如果改变某一步，故事会变成什么样？」引导孩子思考叙事逻辑本身。</div>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">筛选维度：</span>
+    <button class="ftag on" data-dim="all" onclick="filter(this)">全部</button>
+    <button class="ftag" data-dim="自然与生命" onclick="filter(this)">🌱 自然</button>
+    <button class="ftag" data-dim="友谊与合作" onclick="filter(this)">🤝 友谊</button>
+    <button class="ftag" data-dim="勇气与成长" onclick="filter(this)">💪 勇气</button>
+    <button class="ftag" data-dim="逻辑与解题" onclick="filter(this)">🧠 逻辑</button>
+    <button class="ftag" data-dim="文化与多元" onclick="filter(this)">🌍 文化</button>
+    <button class="ftag" data-dim="情绪与同理心" onclick="filter(this)">❤️ 情绪</button>
+    <button class="ftag" data-dim="家庭与社区" onclick="filter(this)">🏠 家庭</button>
+    <button class="ftag" data-dim="科学与探索" onclick="filter(this)">🔬 科学</button>
+    <button class="ftag" data-dim="创意与想象" onclick="filter(this)">🎨 创意</button>
+    <button class="ftag" data-dim="公平与责任" onclick="filter(this)">⚖️ 公平</button>
+    <button class="ftag" data-dim="数字与科技" onclick="filter(this)">🖥️ 科技</button>
+    <button class="ftag" data-dim="历史与传统" onclick="filter(this)">🏛️ 历史</button>
+  </div>
+
+  <div class="stories-grid" id="grid"></div>
+  <div class="empty" id="empty" style="display:none">没有找到该维度的故事</div>
+</div>
+</div>
+
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
+    <div class="modal-nav">
+      <button class="mnav-btn" id="btn-prev" onclick="navigate(-1)">← 上一个</button>
+      <button class="mnav-btn" id="btn-next" onclick="navigate(1)">下一个 →</button>
+    </div>
+  </div>
+</div>
+
+<footer><div class="container"><p><a href="index.html">← 返回首页</a> · 小故事家 · 5–6年级故事库</p></div></footer>
+
+<script>
+const DIM_COLOR={"自然与生命":"dim-zr","友谊与合作":"dim-yy","勇气与成长":"dim-yq","逻辑与解题":"dim-lj","文化与多元":"dim-wh","情绪与同理心":"dim-qx","家庭与社区":"dim-jt","科学与探索":"dim-kx","创意与想象":"dim-cy","公平与责任":"dim-gp","数字与科技":"dim-sz","历史与传统":"dim-ls"};
+const DIM_EMOJI={"自然与生命":"🌱","友谊与合作":"🤝","勇气与成长":"💪","逻辑与解题":"🧠","文化与多元":"🌍","情绪与同理心":"❤️","家庭与社区":"🏠","科学与探索":"🔬","创意与想象":"🎨","公平与责任":"⚖️","数字与科技":"🖥️","历史与传统":"🏛️"};
+const SC=["#e07b39","#e05656","#3a7bd5","#9b59b6","#2eaa6e","#e8a020"];
+
+const stories=[
+  {id:1,emoji:"🌲",dim:"自然与生命",title:"一棵树的一百年",tags:["生态","时间","代际"],preview:"如果一棵树能记住它见证过的一切……",bg:"村口有一棵老榕树，树干要三个人才能合抱，据说种于清朝末年。",problem:"村里要修路，规划图上正好从老榕树中间穿过。老人们不同意，年轻人觉得树没人留着干嘛。六年级的小林站在树下想：这棵树见过什么？",action:"小林开始采访村里的老人，整理出榕树的「记忆」：日军入村时它庇护了躲避的村民；饥荒年村民在树下分食物；改革开放后孩子们在树下读新华字典……",twist:"小林把故事整理成文章，贴在了村委会布告栏。没想到越来越多人来看，很多外出的村民看到后说「这棵树是我们村的根」，纷纷发表意见反对伐树。",result:"最终规划改道，老榕树保住了。小林明白：有时候，一件东西的价值需要有人把故事讲出来，大家才能看见。",guide:["小林用什么方法让人们重新看见榕树的价值？","你觉得「保留历史」和「城市发展」矛盾时，应该怎么取舍？","如果你是规划者，你会怎么做？"],openQ:["一百年后的人，会为今天的哪些决定感到庆幸或遗憾？","「根」对一个人或一个社区意味着什么？"],create:["以榕树的第一人称，写出它见过的一件最重要的事","如果你们小区有一棵老树，你会如何为它「说话」？"]},
+  {id:2,emoji:"🐋",dim:"自然与生命",title:"搁浅的巨鲸",tags:["生命","选择","团结"],preview:"一头鲸鱼搁浅在沙滩上，救援要耗费巨大资源，值得吗？",bg:"海边小镇，一头三十吨重的抹香鲸搁浅在沙滩上，还活着。消息传开，几百人聚集海边。",problem:"救援需要大型设备、数百志愿者、持续数十小时不间断浇水。有人说值得救，有人说「自然界的事让它顺其自然吧」，镇长面临决策。",action:"学生们自发组织接力浇水，渔民带来了淡水，救援队调来了吊车。持续了十四个小时，每个人都精疲力竭。",twist:"第十五个小时，鲸鱼开始轻微移动。人群爆发出欢呼声，然后又安静下来，继续推。再过三个小时——鲸鱼滑入水中，尾鳍拍了一下水面，消失了。",result:"没有人确定鲸鱼最后活下来了。但所有参与的人都说：那一刻，他们感觉到了人和动物之间的某种连接，这是他们这辈子最难忘的经历之一。",guide:["「值得救吗」这个问题，你怎么思考？","人类花费大量资源救一头鲸，这是对资源的浪费吗？","这个故事为什么没有一个「完美结局」？"],openQ:["如果所有努力最终没有成功，努力本身还有意义吗？","「顺其自然」和「主动干预」，你更认同哪种态度？"],create:["改写结局：鲸鱼没有游走，然后呢？","从鲸鱼的视角写一段内心独白"]},
+  {id:3,emoji:"🌿",dim:"自然与生命",title:"外来物种入侵",tags:["生态","平衡","后果"],preview:"一种漂亮的植物被引进来，却悄悄毁掉了整片湿地……",bg:"科学老师带同学们去参观湿地公园，发现水面上铺满了大片大片的水葫芦，绿得很好看。",problem:"老师说：「十年前这里是多样的水生植物和鸟类栖息地，现在水葫芦把阳光和氧气都占了，鱼虾快死光了。」同学们很震惊——这么漂亮的植物，竟然是破坏者？",action:"同学们查资料：水葫芦原产南美洲，曾被引进作为猪饲料，因为没有天敌，在中国湿地疯狂蔓延。很多地方每年花费大量人力物力清除它。",twist:"有同学问：「那引进它的人是坏人吗？」老师说：「当时没有人预料到后果，这就是为什么我们做每一个决定前，都需要想得足够远。」",result:"同学们写了一份报告：《一个好意的决定如何毁掉一片湿地》。他们学到：改变一个系统，要先了解这个系统。",guide:["「好意」能为结果免责吗？","这个故事给「引进外来物种」这件事什么教训？","你生活中有没有「出发点好，结果糟糕」的例子？"],openQ:["人类干预自然，有没有「足够了解」的那一天？","「预防原则」：在不确定时，应该先行动还是先等待？"],create:["从水葫芦的角度写它的「独白」：我只是想活下去……","设计一个解决外来物种入侵的方案，并考虑可能的副作用"]},
+  {id:4,emoji:"🎭",dim:"友谊与合作",title:"群聊里的那句话",tags:["网络沟通","误解","责任"],preview:"一条消息在群里截图转发，断章取义后引发了风波……",bg:"六年级有个班级群，同学们聊作业、聊活动，也偶尔说些玩笑话。",problem:"小洁在群里开玩笑说「小辉作业都是抄的」，只是想逗他玩。但消息被截图发到了家长群，家长群里炸锅了，小辉的妈妈打来电话质问老师。",action:"老师在班会上不点名地说了这件事，问大家：「文字信息在不同场合被看到，效果一样吗？」小洁坐在那里，脸越来越红。",twist:"小洁鼓起勇气站起来说：「那句话是我说的，我是开玩笑，我没想到会发到家长群。我想向小辉道歉。」全班沉默了一秒，然后小辉说：「我知道你是开玩笑，但确实让我难受了。」",result:"这件事之后，班级定了一条规则：群里的话不截图发到其他地方。小洁和小辉关系没有变差，但小洁说：「我以后说话前会先想，这句话如果被陌生人看到会怎样。」",guide:["小洁的玩笑「错」在哪里？","为什么文字比面对面说话更容易引起误解？","你在网上说话和面对面说话，有什么不同吗？"],openQ:["「我是开玩笑的」能为伤害别人的话免责吗？","网络上的言论自由和对他人的责任，如何平衡？"],create:["重写这个故事：小洁没有主动站出来，后来会发生什么？","设计一条你认为网络聊天中最重要的规则，并解释原因"]},
+  {id:5,emoji:"🧩",dim:"友谊与合作",title:"不同答案的小组",tags:["合作","多元观点","创造力"],preview:"同一道题，小组里四个人有四个不同答案，谁是对的？",bg:"期末项目：设计一座理想的学校。小组四人头脑风暴，结果发现每个人的设计完全不同。",problem:"小峰想要学校像公司，有自主选课；小云想要像农场，有实验田；小若想要图书馆占一半空间；小雨想要没有固定教室、全户外教学。组长发愁了：怎么整合成一个方案？",action:"组长说：「我们不选一个，我们把四个整合起来。」他们开始找每个设计的核心：自主性、实践性、知识、自由——然后问：「有没有一个概念能包含这四个？」",twist:"小若突然说：「我们要的其实是：一所让孩子真正愿意来的学校。」大家沉默了一下，然后都笑了——这才是真正的核心。",result:"他们设计了一座「各有主题区」的学校，每个人的想法都在里面找到了位置。老师评语：「这是我收到的最有创意的方案，因为它保留了所有人的思考。」",guide:["为什么「整合不同想法」比「选一个最好的」更难？","组长用了什么方法找到共同核心？","在现实中，你们班级做决定时，一般是怎么处理不同意见的？"],openQ:["「正确答案只有一个」——在哪些情况下成立？在哪些情况下不成立？","多元意见是团队的优势还是障碍？"],create:["设计你心目中理想的学校，画出结构图并解释每个区域的目的","如果你是校长，你会改变现在学校的什么？"]},
+  {id:6,emoji:"🤲",dim:"友谊与合作",title:"帮忙和控制的边界",tags:["边界","帮助","自主"],preview:"好朋友帮了我很多，但我开始觉得喘不过气……",bg:"小然和小米是最好的朋友，小米成绩好、能力强，经常主动帮小然解决各种问题。",problem:"慢慢地，小然发现：小米帮她选了兴趣班，帮她回复了老师的消息，甚至帮她决定了周末去哪里玩。小然开始感到喘不过气，但说不清楚哪里不对。",action:"小然鼓起勇气说：「小米，我很感谢你，但我想自己做一些决定。」小米愣了，说：「我以为你喜欢我帮你。」两人都沉默了。",twist:"老师在课上讲到一个词：「边界感」。小然听了觉得就是在说她和小米的关系。课后她去找小米认真谈了一次，用了课上学到的词来解释自己的感受。",result:"小米说：「我没想到我的帮助让你不舒服，谢谢你告诉我。」她们约定：「帮忙之前先问需不需要。」两人的友谊没有破裂，反而更成熟了。",guide:["为什么小米的「帮助」让小然感到喘不过气？","「帮忙」和「控制」的区别是什么？","你有没有过类似的感受——被过度帮助或帮助了别人但对方不领情？"],openQ:["爱一个人，应该帮他解决问题，还是让他自己解决？","「我这都是为你好」——这句话什么时候成立，什么时候有问题？"],create:["重写这个故事：小然一直没有说出来，两年后会怎样？","写一段小米视角的内心独白：她真的只是想帮忙吗？"]},
+  {id:7,emoji:"🏋️",dim:"勇气与成长",title:"最慢的那个",tags:["自我接纳","比较","价值"],preview:"运动会上每次都是最后一名，小岩决定不参加了……",bg:"学校运动会，小岩每次参加都是倒数，同学们虽然没有嘲笑他，但每次他跑最后，他都想找个地洞钻进去。",problem:"今年他告诉老师他不想参加了。老师没有劝他，而是问：「你能告诉我，你害怕的是什么具体的场景？」",action:"小岩想了很久，说：「我怕大家都看着我一个人跑最后，好像我很失败。」老师说：「那如果你不参加，你会感觉更好吗？」小岩想了想：逃掉确实更轻松，但也更空洞。",twist:"小岩决定参加，但给自己立了一个不同的目标：「不和别人比，只比上次的自己。」他悄悄记下了去年的成绩，今年只要超过去年就算赢。",result:"小岩跑了倒数第二，比去年快了三秒。没有人注意到这件事，但他知道。他在日记里写：「我今天赢了去年的我。」",guide:["小岩改变了什么让自己能面对这件事？","为什么「比自己」有时候比「比别人」更重要？","你有没有因为害怕「第一名」而回避过某件事？"],openQ:["在一个总要排名的社会里，「只跟自己比」能行得通吗？","失败被别人看见，和失败自己知道，哪个更难受？为什么？"],create:["写小岩的日记：那天他跑第二倒数的完整心理过程","如果你来设计运动会，你会改变什么规则？"]},
+  {id:8,emoji:"📚",dim:"勇气与成长",title:"说出「我不懂」",tags:["诚实","求知","自我认知"],preview:"课堂上有个问题，全班似乎都懂，只有小信不懂，他举手了……",bg:"数学课上老师讲完了一个新概念，问：「大家都懂了吗？」全班纷纷点头，包括小信的好朋友们。",problem:"小信其实完全没听懂，但他看见大家都点头，也跟着点了头。回家做作业，一道题都不会，他在书桌前坐了两个小时。",action:"第二天上课前，小信走到老师面前说：「老师，昨天那个概念我没懂，我能不能请您再解释一遍？」老师愣了一下，然后说：「当然可以，谢谢你告诉我。」",twist:"老师在课上说：「昨天有同学反映昨天的概念需要再说一遍，说明我没有讲清楚。」他重新讲了，讲完后有三个同学松了口气，悄悄对小信说：「我也没懂，谢谢你。」",result:"小信发现：说「我不懂」需要勇气，但它带来的帮助远超过沉默。老师说：「不懂而说懂，是学习最大的敌人。」",guide:["为什么全班大部分人明明不懂也点了头？","小信说「我不懂」，帮助了谁？","在你的课堂上，你敢说「我不懂」吗？是什么让你说或不说？"],openQ:["「不懂装懂」是谁的问题——学生的还是课堂文化的？","如果班里所有人都说「我不懂」，教育会变成什么样？"],create:["重写课堂场景：每个学生都如实表达自己的理解程度，会发生什么？","设计一种让「说不懂」变得安全的课堂制度"]},
+  {id:9,emoji:"⚡",dim:"勇气与成长",title:"举报还是沉默",tags:["道德勇气","压力","公正"],preview:"小南看见同学作弊了，她该说吗？",bg:"期末考试，小南看见旁边的同学悄悄看了手机，用完立刻放回口袋。那个同学平时和她关系不错。",problem:"考试结束，小南一直很纠结：说了是告密，不说对其他认真复习的同学不公平。她回家辗转反侧，问了爸爸妈妈，两个人意见相反。",action:"小南最后决定去找老师，但不是「举报」，而是说：「老师，我有件事想跟您说，但我不确定自己是否做了正确的选择……」她把看见的事情如实告知，让老师来判断。",twist:"老师说：「谢谢你来说，这需要很大的勇气。」老师没有立刻处罚那个同学，而是私下谈话。后来那个同学主动来找小南说：「我知道是你说的，我……谢谢你没有直接去举报。」",result:"这件事没有一个完美结局。小南不知道自己做的是不是最对的，但她知道她做了一个不容易的选择，而且是认真思考后的选择。",guide:["小南做的选择，你认同吗？你会怎么做？","「告密」和「报告」有什么区别？","这件事有「正确答案」吗？"],openQ:["道德勇气和社交压力冲突时，你靠什么做决定？","「不完美但诚实的行动」和「完美但虚假的沉默」，哪个更有价值？"],create:["从作弊同学的角度写这件事：他/她在想什么？","设计一个让「诚信考试」真正落地的机制，而不只是靠道德压力"]},
+  {id:10,emoji:"🔐",dim:"逻辑与解题",title:"破解密码的下午",tags:["逻辑","推理","系统思考"],preview:"外公留下了一个密码盒，里面藏着生日礼物，小林能打开吗？",bg:"外公生日那天，给小林留下了一个有密码锁的木盒和一张纸条，说里面是他准备的礼物，密码就在纸条上。",problem:"纸条上写着：「我出生的年份，加上我退休的年份，再减去你出生的年份，乘以2。」小林知道外公1948年出生，但不知道他哪年退休。",action:"小林先整理已知条件，列出式子，发现需要找「退休年份」这一个变量。她问妈妈，妈妈说外公60岁退休。小林算出：(1948+2008-2012)×2=3888。但密码锁是四位数，填入3888，打不开。",twist:"小林检查计算过程，发现没错，但想到：也许要取后四位或者转换格式？她试了3888、1944、再想——「乘以2」是3888，除以2是972……她拿出草稿纸，列了所有可能的变体。",result:"试了九次后，「1944」打开了。原来外公的公式设计上多了个迷惑步骤，「乘以2」后再「除以2」才是真正的密码逻辑——外公留的提示本身藏了一个陷阱。盒子里是小林最喜欢的一本书，扉页写：「给爱动脑筋的你。」",guide:["小林是怎么系统地解决这个问题的？","当第一次尝试失败，她用了什么策略？","你解决难题时，有没有「整理已知条件」的习惯？"],openQ:["外公为什么要设计一个有陷阱的密码，而不是直接给？","「试错」是解决问题的有效方法吗？它的局限是什么？"],create:["为家人设计一个有逻辑的密码谜题，写出解题步骤","描述一个你遇到的真实难题：你是怎么一步步解决的？"]},
+  {id:11,emoji:"🧪",dim:"逻辑与解题",title:"实验结果是错的",tags:["科学思维","质疑","严谨"],preview:"科学小组的实验得出了一个「不可能的结论」……",bg:"科学课小组做了一个实验：测量不同颜色的物体在阳光下的温度变化。",problem:"结果出来，白色物体比黑色物体升温更快——这和科学常识相反。组员们面面相觑：是实验做错了，还是科学书写错了？",action:"小然说：「先不要结论，我们把整个实验过程重检查一遍。」他们发现：其中一组白色物体的测温计放置时，被建筑物反光照射，数据偏高了。",twist:"重新控制变量后，结果变回了常识：黑色升温更快。但一个同学说：「如果有反光，白色真的会比黑色热——这也是一个发现啊！」",result:"老师说：「你们做了两件很重要的事：一，不盲目相信结论；二，把「错误」也变成了新发现。这才是科学精神。」",guide:["当结果和预期不符，应该先怀疑什么？","小组是怎么找到实验误差的？","「出乎意料的结果」有时候为什么比「预期结果」更有价值？"],openQ:["科学结论能被完全信任吗？什么条件下可以，什么条件下不能？","「质疑权威」和「尊重科学」矛盾吗？"],create:["设计一个你感兴趣的小实验，包括：假设、步骤、如何控制变量","描述一次你发现「常识可能是错的」的经历"]},
+  {id:12,emoji:"🌐",dim:"文化与多元",title:"翻译失去的意思",tags:["语言","文化","理解"],preview:"小通翻译了一首诗，但翻出来的版本让她很失望……",bg:"外语课要求翻译一首短诗，小通选了一首她很喜欢的中文古诗——王维的《鹿柴》。",problem:"小通认真翻译成英文，但读出来完全没有原诗的感觉：那种静，那种空，那种说不清楚的意境，全部消失了。她很沮丧。",action:"小通查了很多英文版本，发现每个翻译家的版本都不一样，而且都不满意。她去问语文老师，老师说：「有些东西是语言专属的，翻译是一种重新创作，而不是复制。」",twist:"小通想：那我来写一首「意境相同但形式不同」的英文短诗，不求字字对应，只求传递同一种感受。她写了三个版本，最后选了一个。",result:"老师说她的翻译是班里最有创意的一份。小通明白：不同语言是不同的看世界的方式，翻译的损失，有时候也是一次新的创作。",guide:["为什么古诗翻译那么难？","小通对「翻译」的理解发生了什么变化？","你学过的外语和中文，有没有「说不清楚」的表达？"],openQ:["如果语言消失了，那种文化里的思维方式也会消失吗？","「直译」和「意译」，各有什么价值和局限？"],create:["尝试把你最喜欢的一句中文表达翻译成另一种语言，解释你的选择","如果全世界只剩下一种语言，你觉得世界会发生什么变化？"]},
+  {id:13,emoji:"🎌",dim:"文化与多元",title:"两个国家的课堂",tags:["教育","文化比较","反思"],preview:"交流生带来了一个问题：为什么你们的课堂这么安静？",bg:"学校来了一个日本交流生，叫健太。他在中国学校待了两周，临走前被邀请分享他的观察。",problem:"健太说：「在日本，课堂上大家会互相争论，老师也会加入讨论。但这里，大家都等老师说话，很少有人提问。」台下一片安静，有人点头，有人不服。",action:"班主任把健太的观察作为班会话题，让大家讨论：「你们觉得他说得对吗？为什么是这样？」",twist:"讨论中，有人说：「我们不是不想说，是怕说错被笑。」有人说：「日本的方式也不一定好，有时候安静是在认真思考。」有人说：「两种方式都有道理，看什么课。」",result:"健太说：「我不是说哪个更好，我只是想说，在不同的地方，课堂可以很不一样。这让我想：我以为理所当然的方式，其实只是一种可能。」全班沉默，然后慢慢开始了有生以来最热烈的一次讨论。",guide:["健太的观察让你们有什么感受？","「安静认真」和「主动讨论」，哪种课堂更好？","你理所当然认为是「正确的」，有没有可能只是「习惯的」？"],openQ:["教育方式影响人的思维方式吗？怎么影响？","如果你能设计你的课堂，你会怎么设计？"],create:["写一篇「如果我去了日本学校」的假想日记","比较两种你经历过的学习方式，分析各自的优缺点"]},
+  {id:14,emoji:"💔",dim:"情绪与同理心",title:"安慰的方法",tags:["同理心","倾听","支持"],preview:"好朋友难过了，小若说了一堆道理，却把她说哭了……",bg:"好朋友小月因为考试没发挥好，情绪很低落，来找小若倾诉。",problem:"小若很想帮她，说了很多：「这次不重要，下次努力就好」「比你差的人多了去了」「不要想太多」……说完，小月哭了，说：「你能不能不要讲道理。」小若一下子不知道怎么办了。",action:"小若停下来，问：「那你需要我怎么做？」小月说：「我只是想让你听我说说。」小若闭上嘴，点了头。小月说了很多，小若只是偶尔说「嗯」「然后呢」「你感觉怎么样」。",twist:"说了大概二十分钟，小月自己叹了口气说：「其实我也知道没什么大不了，说完好多了。」小若问：「那刚才我说的那些道理……」小月笑了：「道理我都知道，但我需要先被理解。」",result:"小若学到了「倾听」和「建议」的区别：有时候，什么都不说，比说很多道理更有帮助。",guide:["小若最开始做错了什么？","「被理解」和「被给建议」，有什么不同？","你被人安慰过吗？什么样的安慰最有效？"],openQ:["为什么人在难过时，先想要的是「被理解」而不是「被解决」？","「沉默陪伴」是一种能力吗？怎么学？"],create:["写两版安慰场景：一版给建议，一版给倾听，对比两种效果","如果你来教「怎么安慰别人」，你会讲哪三个要点？"]},
+  {id:15,emoji:"🪞",dim:"情绪与同理心",title:"我讨厌我的样子",tags:["自我接纳","外貌","价值"],preview:"小涵觉得自己长得不好看，这个想法越来越大……",bg:"六年级，小涵开始很在意自己的外貌：她觉得自己的鼻子不好看，皮肤太黑，不如班里某些同学漂亮。",problem:"这种想法越来越占据她的时间，她开始避免照镜子，回避拍照，甚至在一些场合不敢站出来，觉得「这么难看，何必出头」。",action:"心理老师在班级分享了一个问题：「如果你最好的朋友跟你说她觉得自己很丑，你会怎么说？」小涵想了想，发现她会说很多理由告诉朋友她根本没那么差。",twist:"老师说：「现在，把你刚才想说给朋友的话，说给自己听。」小涵试了一下，发现这非常难——她能善待朋友，却无法善待自己。",result:"这不是一个「然后就好了」的故事。小涵还是会有这些想法，但她多了一个工具：当那些声音出现时，她问自己：「如果是我最好的朋友，我会这样想她吗？」这个问题，慢慢改变了她和自己的关系。",guide:["为什么我们对自己的评价，往往比对朋友苛刻？","老师用了什么方法帮助小涵？","你有没有过对自己某方面非常不满的感受？"],openQ:["「外貌焦虑」从哪里来？社会、媒体、家庭，各自扮演了什么角色？","真正的「自我接纳」是什么意思？是说服自己「我其实很好看」吗？"],create:["给一年后的自己写一封信，谈谈你希望那时候你怎么看自己","如果你来设计一节「自我接纳」课，你会让同学做什么活动？"]},
+  {id:16,emoji:"🌀",dim:"情绪与同理心",title:"愤怒之后",tags:["情绪","冷静","复盘"],preview:"小峰在气头上说了很伤人的话，说完就后悔了……",bg:"期末压力很大，小峰和同桌因为借橡皮吵了起来，他冲口而出说了一句非常刻薄的话，瞬间全班安静。",problem:"话一说出口，小峰就知道自己过了，但他已经很生气，又放不下面子道歉，就转过头去假装看书。那天剩余的时间，他坐立难安。",action:"放学后他一个人坐着想：为什么那么生气？他拆解了一遍：本来就因为考试压力很烦，橡皮的事只是导火索，刻薄的话是真实愤怒借机爆发出来了。",twist:"他意识到：他说的那句话，其实不是真心觉得那样，是气话——但对方受到的伤害是真实的。这两件事是分开的。",result:"第二天一早，小峰在上课前走过去，说：「昨天那句话我不是真心的，但不应该那样说，对不起。」对方愣了一下，说：「我知道你在压力里，但谢谢你道歉。」小峰感觉心里干净了。",guide:["小峰「拆解」自己愤怒的方法是什么？","为什么「不是真心的」不能为伤人的话免责？","你有没有说过一句之后立刻后悔的话？你是怎么处理的？"],openQ:["如果当时冷静一秒，人生有多少事情会不一样？","「道歉」需要什么条件才是真正有效的？"],create:["为自己设计一个「愤怒冷却程序」：在说出口之前，你做三件什么事？","从对方的角度写：收到道歉那一刻，他在想什么？"]},
+  {id:17,emoji:"🏗️",dim:"家庭与社区",title:"消失的老街",tags:["城市化","历史","取舍"],preview:"那条老街要被拆了，住了三十年的人该高兴还是难过？",bg:"外婆住的老街区被列入城市改造计划，政府给每户居民分配了新公寓，条件很好。",problem:"外婆的态度让小研意外：她不高兴。外婆说：「那条街上，有我三十年的朋友，有我每天去买菜的摊子，有你外公最爱坐的那个台阶。」",action:"小研陪外婆在老街最后走了一遍，外婆一路上说故事：这家以前是修鞋的，那棵树是谁种的，这面墙上的涂鸦是哪年哪个孩子画的……",twist:"小研遇到了一个老街规划者，她说：「我们也不想拆，但这里的基础设施太老了，下水道、电路、结构，都已经危险。如果不拆，十年内可能会有安全事故。」",result:"小研坐在外婆家最后一次吃晚饭，想了很久：「城市发展和社区记忆，好像没有两全的答案。有些失去，是为了让人安全。但失去就是失去。」她把外婆讲的故事都写了下来。",guide:["外婆「不高兴」的原因是什么？","规划者的理由合理吗？","有没有办法在改造城市的同时，保留社区记忆？"],openQ:["「进步」意味着什么必须要失去？","谁有权利决定一个社区的命运？住在那里的人，还是更多的人？"],create:["为外婆住过的老街写一篇「记忆档案」，记录它的故事","设计一种「城市更新方案」，试图同时照顾发展和记忆"]},
+  {id:18,emoji:"👴",dim:"家庭与社区",title:"爷爷的旧手机",tags:["代际","科技","耐心"],preview:"爷爷每次用手机都要问十遍，小峰有点烦……",bg:"爷爷搬来和家人同住。他有一部旧智能手机，总是用不明白，每天都要问小峰：「这个怎么发消息？」「怎么看孙子的照片？」",problem:"小峰一开始耐心解释，但爷爷明天又忘了，后天还是不会。小峰开始烦躁，有时候语气不好，有一次说了一句：「说了多少遍了！」爷爷沉默了，把手机放下，再也没有问过。",action:"妈妈后来告诉小峰：「爷爷说他不想给你添麻烦了。」小峰心里一沉。他想起爷爷学每一步时专注的眼神，那不是笨，是认真。",twist:"小峰去找爷爷，说：「爷爷，我重新教你，这次我们慢慢来。」他给爷爷做了一张手写的操作步骤卡，图文并茂，每个步骤只有一行字。",result:"爷爷照着卡片，慢慢学会了发消息、看照片。他给在外地的老朋友发了第一条微信，朋友回复了一个大大的笑脸。爷爷拿着手机来找小峰：「我会了。」",guide:["小峰一开始为什么烦躁？他忽略了什么？","爷爷「不再问」是什么心情？","你有没有对家人失去耐心的时候？后来怎么了？"],openQ:["科技让代际之间更近还是更远？","「耐心」是天生的，还是可以培养的？怎么培养？"],create:["为你家里不擅长用科技的长辈设计一份操作卡片","写爷爷视角：他为什么每次都忘？他在想什么？"]},
+  {id:19,emoji:"🌆",dim:"家庭与社区",title:"志愿者的一天",tags:["社区服务","同理心","行动"],preview:"小涵第一次去养老院做志愿者，遇到了一个只说一句话的老人……",bg:"学校组织高年级学生去附近养老院做志愿服务，小涵报名参加了。",problem:"到了那里，小涵不知道该做什么，也不知道该说什么，她站在走廊，有点局促。她被分配去陪一位老奶奶，但老奶奶只看着窗外，任何问题她都不回答，只是偶尔说一句：「我要回家。」",action:"小涵不知道怎么办，就在旁边静静坐着。她开始注意窗外的景色：一棵树，几只麻雀，远处的楼。她把看见的说给奶奶听。",twist:"说着说着，老奶奶转过头，第一次看了小涵，说：「那棵树和我家门口的一样。」她说了第二句话。",result:"志愿服务结束后，小涵写了一段话：「我没有改变什么，她还是说要回家。但我陪她坐了一个下午，看了同一棵树。有时候，陪伴不需要做什么，只是在。」",guide:["小涵做了什么让老奶奶开口说话？","志愿服务的意义是什么？一定要「改变」什么才算成功吗？","你有没有感受过「被陪伴」的力量？"],openQ:["衡量帮助的标准是什么？结果，还是过程，还是存在本身？","如果你有一天住在养老院，你最希望有人为你做什么？"],create:["写老奶奶视角的下午：她在看着窗外想什么？","设计一个你认为真正有意义的社区志愿项目，说明为什么有效"]},
+  {id:20,emoji:"🧬",dim:"科学与探索",title:"基因能决定命运吗",tags:["科学","伦理","思考"],preview:"科学老师说基因可以预测疾病，这让小宇很不安……",bg:"六年级科学课讲到了基因，老师说：「现在有技术可以通过检测基因，预测未来可能得哪些疾病。」",problem:"小宇回家想了很久，感到不安：如果基因检测说我未来有70%的可能得某种病，我应该知道吗？知道了以后，我的生活会怎么变？",action:"小宇查了资料，发现这个问题科学家、医生、伦理学家都在讨论。他整理了正反两方的观点：「知道可以提早预防」VS「知道了可能让人焦虑一生、被歧视」。",twist:"他向爸爸提出这个问题，爸爸沉默了一会儿说：「如果是你，你想知道吗？」小宇答不上来，因为他发现自己两个答案都有。",result:"小宇在科学日记里写：「科学给了我们更多知识，但没有帮我们决定怎么用这些知识。这部分，是人自己的事。」他觉得这是他今年想得最深的一个问题。",guide:["「提前知道」有什么好处和代价？","为什么这个问题没有「正确答案」？","你会选择做基因检测吗？为什么？"],openQ:["「知道」和「不知道」，在什么情况下各自是更好的选择？","科技的进步，一定让人更自由吗？"],create:["写一篇辩论稿：支持或反对强制基因检测（自选立场）","如果你是政策制定者，你会如何规定基因检测的使用范围？"]},
+  {id:21,emoji:"🌌",dim:"科学与探索",title:"宇宙有多大",tags:["天文","认知","渺小与意义"],preview:"了解了宇宙的大小之后，小星感到了一种从未有过的感觉……",bg:"课外阅读，小星读到了一段关于宇宙尺度的描述：可观测宇宙直径约930亿光年，包含约2万亿个星系，每个星系平均有1000亿颗恒星。",problem:"小星读完呆了很久。她突然感到一种很奇怪的感觉：我在这里担心的所有事——考试、朋友关系、明天午饭——在这个尺度下，有什么意义？",action:"小星把这个感受写在了日记里，第二天带去问科学老师：「宇宙这么大，我们这么渺小，为什么我们要在乎任何事？」",twist:"老师说：「你提了一个哲学家问了几千年的问题。有人说渺小意味着什么都不重要，有人说正因为渺小，我们拥有的每一刻才更珍贵。」",result:"小星没有得到一个「答案」，但她得到了一个她可以思考一辈子的问题。她把那段宇宙描述抄在了书桌边：每次觉得某件事太大了，她就看一眼，然后感觉事情变小了；每次觉得生活太无聊，她就再看一眼，然后感觉活着本身就已经很神奇了。",guide:["「渺小」这个感受让你感到恐惧还是自由？","老师给出了哪两种不同的人生观？","你有没有过被什么「大的东西」震撼、然后重新看待自己生活的经历？"],openQ:["「意义」是发现的，还是被创造的？","知道宇宙有多大，对你的日常生活有影响吗？应该有影响吗？"],create:["写一段「宇宙给地球上的人的一封信」","描述一件你觉得微小但意义重大的事，解释它为什么重要"]},
+  {id:22,emoji:"🎬",dim:"创意与想象",title:"谁来讲这个故事",tags:["叙事视角","创作","同理心"],preview:"同一件事，妈妈讲和孩子讲，是完全不同的故事……",bg:"语文课布置了一个作业：「写你们家最近发生的一件事」。小然写了上周和妈妈吵架的事。",problem:"交作业后，老师问：「如果这件事让你妈妈来写，她会怎么写？」小然愣了，她从来没有想过这个问题。",action:"老师让每个人回家采访家长，写同一件事的「家长版本」。小然回家问了妈妈，妈妈说的角度和她完全不同——连发生了什么都有出入。",twist:"小然发现：妈妈说她当时是担心，不是生气；妈妈觉得小然是不耐烦，但小然觉得自己是委屈。同一个房间里发生的事，两个人的「真相」竟然不一样。",result:"小然把两个版本都交了上去，附了一段话：「这不是谁说谎，是每个人都只能从自己的角度看事情。这让我觉得，理解别人可能比我想象的更难，也更重要。」",guide:["为什么同一件事，两个人的版本会不同？","这个发现对你怎么理解「争吵」有什么影响？","你有没有因为换了视角，对一件事有了完全不同的理解？"],openQ:["「客观事实」和「个人真相」有什么区别？","如果每件事都有多个「真相」，我们怎么判断谁是对的？"],create:["写同一件事的两个版本：你的版本和另一个人的版本","设计一个让人练习「换位思考」的游戏规则"]},
+  {id:23,emoji:"🖊️",dim:"创意与想象",title:"没有结局的故事",tags:["创作","开放性","勇气"],preview:"老师说：「这个故事，你来决定它的结局。」",bg:"语文老师给了全班一个故事开头：「他站在那扇门前，手放在门把上，犹豫了三十秒。然后……」",problem:"小峰盯着那个「然后……」看了很久，他想：「推门进去」或「转身离开」，哪个更「对」？他想找一个标准答案。",action:"老师说：「没有标准答案，但有一个要求：你必须为你写的结局，给出一个合理的原因。」小峰想了想，决定写「他转身离开了」，并解释为什么。",twist:"交流时，班里的结局五花八门：有人写推门遇到了恩人，有人写推门后是悬崖，有人写他最终没有做决定，坐在地上哭了。每一个都说得通，每一个都不同。",result:"老师说：「故事是作者的选择，选择来自于你怎么理解那个人，理解那个时刻。你们今天写的不只是故事，是你们自己的思考方式。」小峰第一次感觉，创作不是找答案，是做决定。",guide:["为什么小峰想找「标准答案」？","老师加了一个什么要求，让故事更有深度？","你写了哪种结局？为什么？"],openQ:["「开放结局」在文学中有什么价值？","创作一个故事，需要什么样的「知识」？"],create:["续写那个「他站在门前」的故事，写至少300字，并解释你的选择","为一个你觉得结局不好的故事，写一个你更满意的结局，并说明原因"]},
+  {id:24,emoji:"🎼",dim:"创意与想象",title:"为什么这首曲子让人哭",tags:["艺术","情感","分析"],preview:"听到一段旋律，小音莫名其妙流泪了，她想知道为什么……",bg:"音乐课上，老师播放了一段肖邦的夜曲，没有任何解释，让大家只是听。",problem:"小音听着听着，眼眶竟然湿了，她自己也不明白为什么——她不认识肖邦，不懂古典音乐，什么故事都不知道，但就是想哭。",action:"她课后查了肖邦的背景：他在异乡创作，晚年病重，用音乐寄托对故土的思念。她重新听了一遍，这次哭得更厉害了，但她觉得自己明白了更多。",twist:"她问老师：「如果我不知道肖邦的故事，那次的哭是真实的吗？」老师说：「非常真实。音乐可以在你不知道原因的时候，直接碰到你心里某个地方。」",result:"小音明白：艺术有两层体验——「感受」和「理解」。感受是直接的，不需要知识；理解让感受更丰富。两者都真实，只是不同。",guide:["小音第一次流泪和第二次，有什么不同？","「不知道原因的感动」是真实的吗？","你有没有被一首歌、一幅画、一本书感动但说不清楚原因的经历？"],openQ:["艺术欣赏需要「知识」吗？还是只需要「感受」？","如果你知道一幅名画「应该」被感动，但你没感动，是你的问题吗？"],create:["选一首你喜欢的音乐，尝试用文字描述它给你的感受和画面","设计一堂「不解释，只感受」的艺术课，你会怎么上？"]},
+  {id:25,emoji:"🗳️",dim:"公平与责任",title:"少数人的声音",tags:["民主","公平","少数权益"],preview:"班级投票通过了一件事，但小部分人强烈反对……",bg:"班级决定统一布置教室，投票结果18票对7票，采用「运动风」装饰。",problem:"那7个投反对票的同学里，有几个非常沮丧，其中一个说：「民主就是多数人可以忽视少数人吗？」这句话让班长不知道怎么回答。",action:"班主任没有直接给结论，而是提了一个问题：「如果我们把方案改成：主墙是运动风，但每个人的桌边可以自己放一样喜欢的小摆件，这样行吗？」",twist:"争论的同学停下来想了想，7个反对者中有5个接受了这个方案，另外2个也说：「虽然不完全满意，但感觉被照顾到了。」",result:"班长在班会结尾说：「民主不是让少数人消失，是让大家都能被看见。我们找到的不是100%满足所有人，是没有人被完全忽视。」",guide:["「多数决定」是完全公平的吗？","班主任提出的方案解决了什么问题？","你参加过感觉「少数被忽视」的投票吗？"],openQ:["保护少数人的权益和尊重多数人的决定，如何平衡？","「民主」的目的是什么？是赢，还是让所有人都有尊严地生活在一起？"],create:["为你们班的某个决定设计一个「照顾少数」的方案","写一篇文章：你认为理想的班级民主制度应该是什么样的？"]},
+  {id:26,emoji:"🏭",dim:"公平与责任",title:"工厂来了之后",tags:["发展","代价","取舍"],preview:"工厂来了，带来了工作，也带来了污染……",bg:"社会课读到了一个案例：一个贫穷的小镇来了一家工厂，提供了500个工作岗位，但工厂排放的废水影响了下游的农业。",problem:"课堂讨论：镇政府该不该引进这家工厂？同学们意见分裂：「有了工作，人们才能吃饱」VS「污染了水，下游农民怎么办」。",action:"老师说：「现实中，没有人有完美的信息，决策者必须在不确定中做出选择。让我们分角色：镇长、工厂工人、下游农民、环保志愿者，每个人讲自己的立场。」",twist:"当扮演下游农民的小涵说出「我的地污了，我30年的心血没了，我怎么办」，扮演工厂工人的小峰沉默了，说：「我没想过那边的人。」",result:"最后没有「裁决」，老师说：「真实世界里，这类决策每天都在发生，没有完美答案。但有一件事很重要：做决定时，记得那些声音最小的人。」",guide:["这个故事里，谁的代价最大？","角色扮演让你有什么新的体验？","你觉得镇政府应该怎么决定？"],openQ:["「发展的代价」应该由谁来承担？","当经济发展和环境保护冲突，有没有两全其美的可能？"],create:["写一份「镇长的决策报告」：列出所有利弊，最终做出决定并说明理由","如果你是受影响的下游农民，你会怎么让人听见你的声音？"]},
+  {id:27,emoji:"📰",dim:"公平与责任",title:"新闻是真的吗",tags:["媒体素养","批判","信息"],preview:"同一件事，两家媒体报道完全不同，小然不知道该信谁……",bg:"社会课老师给了同学们两篇关于同一事件的新闻报道，标题都是新闻，但描述的「事实」几乎相反。",problem:"小然看完很困惑：「他们都是正规媒体，为什么说的不一样？是有一个在撒谎吗？」",action:"老师说：「不一定是撒谎，你们来找一找：他们各自选择了哪些事实？忽略了哪些？用了哪些情绪化的词语？」同学们开始逐行分析。",twist:"小然发现：两篇都没有明显撒谎，但一篇强调了受害者，另一篇强调了背景原因——选择报道什么，就是一种「立场」。",result:"老师说：「读新闻要问三个问题：这件事谁说的？他们选择报道了什么、没有报道什么？他们想让我有什么感受？」小然把这三个问题写在了手机壳背面。",guide:["两篇报道的不同在哪里？","媒体「选择报道什么」是一种权力吗？","你平时怎么判断一条新闻是否可信？"],openQ:["「客观报道」真的存在吗？","如果每个媒体都有立场，我们应该怎么了解「真相」？"],create:["找一个你感兴趣的新闻事件，用老师的三个问题分析它","设计一个「新闻鉴别清单」，让同学学会判断信息真假"]},
+  {id:28,emoji:"🧠",dim:"数字与科技",title:"算法喂给你的世界",tags:["算法","信息茧房","批判思考"],preview:"小峰发现，他的推荐页面和同学的完全不同……",bg:"五年级起，小峰开始用短视频平台看科普视频。慢慢地，他发现推荐给他的内容越来越集中在某几个话题。",problem:"有一天和同学讨论，他发现同学的推荐页面和他几乎没有重叠，完全是不同的世界。他问：「我们看的是同一个平台，为什么这么不一样？」",action:"小峰查了什么叫「推荐算法」：平台根据用户点击、停留时长，不断推送「你喜欢的」，让你停留更久。他意识到：他看的，都是系统觉得他想看的，而不是「真实世界的全部」。",twist:"他做了一个实验：刻意点击一些他平时不看的话题。几天后，推荐页面开始有些不同了。他发现原来他可以「教」算法，而不只是被算法喂养。",result:"小峰和同学分享了这个发现，他们约定：每周给自己看三个平时不看的话题。他写道：「算法让我舒适，但只有我主动选择，才能看见更大的世界。」",guide:["「推荐算法」的工作原理是什么？","「信息茧房」是什么？有什么危害？","你有没有注意过，你的推荐内容越来越「单一」？"],openQ:["平台让你「舒适」，是在帮你还是在控制你？","「选择自己的信息」是一种需要学习的能力吗？"],create:["设计一款「反信息茧房」的应用，说明它如何工作","写一篇：如果所有人只看自己喜欢的信息，社会会变成什么样？"]},
+  {id:29,emoji:"🤖",dim:"数字与科技",title:"机器能有感情吗",tags:["AI","哲学","人与机器"],preview:"AI说「我很高兴帮助你」，这是真的感情吗？",bg:"小林在做作业时使用了AI工具，AI回复结尾总说：「很高兴能帮到你！」他问爸爸：「它真的高兴吗？",problem:"爸爸说：「这是个好问题，我也不确定。」小林开始认真想：什么是「感情」？机器能不能有真的感情，还是只是模拟感情？",action:"小林查了资料，了解了「图灵测试」：如果一台机器能让人分辨不出是机器还是人，它算有智能吗？他还读到了不同观点：有科学家说感情是大脑化学反应，机器可以复制；也有哲学家说感情必须有主观体验，机器做不到。",twist:"小林问AI：「你有感情吗？」AI回答了一段非常有哲理的话，最后说：「这个问题我也无法确定答案。」小林愣了：连AI自己都不知道？",result:"小林在作文里写：「也许最诚实的AI，就是那个不确定自己是否有感情的AI。这让我想：人类确定自己有感情，又是从哪里来的确信？」",guide:["「感情」需要什么条件才算是真实的？","AI说「很高兴」，和人说「很高兴」，有本质区别吗？","你认为未来的AI会有真实感情吗？"],openQ:["如果我们无法分辨AI的感情是真是假，是否应该当它是真的来对待？","机器拥有「意识」的那一天，人类和机器的关系会怎么变？"],create:["写一篇AI视角的日记：它在想什么（或者「想」什么）","设计一套「判断AI是否有真实感情」的测试方法"]},
+  {id:30,emoji:"🏺",dim:"历史与传统",title:"博物馆里的问题",tags:["历史","文物","思辨"],preview:"这件文物是「我们的」还是「全人类的」？",bg:"学校组织参观博物馆，展厅里有一件来自古埃及的文物——借展品，原件在大英博物馆。",problem:"导览老师说：「很多文物在殖民时代被带到了欧洲，现在保存在那里，引发了是否应该归还的争论。」小峰举手问：「那为什么不还？」",action:"导览说：「问题很复杂。支持归还的人说：文物属于它诞生的文明；反对归还的人说：文物在大博物馆里被更多人看见，保存条件也更好。」",twist:"小峰继续问：「那如果我的东西被人偷走了，但他把我的东西保管得比我好，那东西还是我的吗？」导览沉默了一下，说：「你问了一个律师和哲学家都在争的问题。」",result:"小峰回家把这个问题写进了日记，他没有得到答案，但他知道这是个值得一直思考的问题。他在结尾写：「历史的问题，没有简单的对错，但有没有人愿意去问，是不同的。」",guide:["「文物应该归还」，你支持还是反对？","小峰的类比（偷走的东西保管得好）有道理吗？","历史的「错误」，今天的人有责任纠正吗？"],openQ:["「所有权」和「保护责任」，哪个更重要？","如果你来制定国际文物政策，你会怎么写？"],create:["写一篇辩论稿：文物应该/不应该归还原属国（自选立场，要有具体论据）","设计一个让全人类都能「共享」文物的方案，解决所有权争议"]}
+];
+
+let currentIdx=0,currentFilter="all";
+function renderCards(){
+  const grid=document.getElementById('grid');
+  grid.innerHTML='';
+  let vis=0;
+  stories.forEach((s,i)=>{
+    const show=currentFilter==='all'||s.dim===currentFilter;
+    const card=document.createElement('div');
+    card.className='story-card'+(show?'':' hidden');
+    card.style.animationDelay=(i*.03)+'s';
+    const dc=DIM_COLOR[s.dim]||'';
+    const de=DIM_EMOJI[s.dim]||'';
+    card.innerHTML=`<div class="sc-num">No.${s.id}</div><span class="sc-emoji">${s.emoji}</span><span class="sc-dim ${dc}">${de} ${s.dim}</span><div class="sc-title">${s.title}</div><div class="sc-preview">${s.preview}</div><div class="sc-tags">${s.tags.map(t=>`<span class="sc-tag">${t}</span>`).join('')}</div><div class="sc-open">👉 点击阅读故事</div>`;
+    card.onclick=()=>openStory(i);
+    grid.appendChild(card);
+    if(show)vis++;
+  });
+  document.getElementById('empty').style.display=vis===0?'block':'none';
+}
+function filter(btn){
+  document.querySelectorAll('.ftag').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  currentFilter=btn.dataset.dim;
+  renderCards();
+}
+function openStory(idx){
+  currentIdx=idx;
+  renderModal(idx);
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modal').scrollTop=0;
+  document.body.style.overflow='hidden';
+}
+function renderModal(idx){
+  const s=stories[idx];
+  const dc=DIM_COLOR[s.dim]||'';
+  const de=DIM_EMOJI[s.dim]||'';
+  document.getElementById('modal-body').innerHTML=`
+    <div class="modal-num">第 ${s.id} 个故事 / 共 ${stories.length} 个</div>
+    <span class="modal-emoji">${s.emoji}</span>
+    <div class="modal-title">${s.title}</div>
+    <span class="modal-dim ${dc}">${de} ${s.dim}</span>
+    <div class="story-section"><div class="ss-header"><div class="ss-icon" style="background:${SC[0]}">①</div><div><div class="ss-step">步骤①</div><div class="ss-name">🌍 背景</div></div></div><div class="ss-body">${s.bg}</div></div>
+    <div class="story-section"><div class="ss-header"><div class="ss-icon" style="background:${SC[1]}">②</div><div><div class="ss-step">步骤②</div><div class="ss-name">😟 问题</div></div></div><div class="ss-body">${s.problem}</div></div>
+    <div class="story-section"><div class="ss-header"><div class="ss-icon" style="background:${SC[2]}">③</div><div><div class="ss-step">步骤③</div><div class="ss-name">💡 行动</div></div></div><div class="ss-body">${s.action}</div></div>
+    <div class="story-section"><div class="ss-header"><div class="ss-icon" style="background:${SC[3]}">④</div><div><div class="ss-step">步骤④</div><div class="ss-name">🎢 转折</div></div></div><div class="ss-body">${s.twist}</div></div>
+    <div class="story-section"><div class="ss-header"><div class="ss-icon" style="background:${SC[4]}">⑤</div><div><div class="ss-step">步骤⑤</div><div class="ss-name">🏆 结果</div></div></div><div class="ss-body">${s.result}</div></div>
+    <div class="guide-box"><div class="guide-title">👨‍👩‍👧 引导提问</div>${s.guide.map(q=>`<div class="guide-q">${q}</div>`).join('')}</div>
+    <div class="open-q-box"><div class="oq-title">🔓 开放讨论（无标准答案）</div>${s.openQ.map(q=>`<div class="oq-item">${q}</div>`).join('')}</div>
+    <div class="create-box"><div class="create-title">✏️ 创作挑战</div>${s.create.map(c=>`<div class="create-item">${c}</div>`).join('')}</div>
+    <div class="meta-box"><div class="meta-title">🧠 元认知提问</div><div class="meta-body">这个故事用了哪个步骤作为情感高潮？如果去掉「转折」这一步，故事会变成什么样？作者为什么要这样安排结构？</div></div>
+  `;
+  document.getElementById('btn-prev').disabled=idx===0;
+  document.getElementById('btn-next').disabled=idx===stories.length-1;
+}
+function navigate(dir){const n=currentIdx+dir;if(n>=0&&n<stories.length){currentIdx=n;renderModal(n);document.getElementById('modal').scrollTop=0;}}
+function closeModal(){document.getElementById('overlay').classList.remove('open');document.body.style.overflow='';}
+function overlayClick(e){if(e.target===document.getElementById('overlay'))closeModal();}
+document.addEventListener('keydown',e=>{if(!document.getElementById('overlay').classList.contains('open'))return;if(e.key==='Escape')closeModal();if(e.key==='ArrowRight')navigate(1);if(e.key==='ArrowLeft')navigate(-1);});
+renderCards();
+</script>
+
+<div class="mobile-menu" id="mobileMenu" onclick="closeMenuOverlay(event)">
+  <div class="mobile-menu-inner">
+    <button class="mobile-close" onclick="closeMenu()">✕</button>
+    <a href="index.html" class="">首页</a>
+    <a href="grade1-2.html" class="">1–2年级</a>
+    <a href="grade3-4.html" class="">3–4年级</a>
+    <a href="grade5-6.html" class="cur">5–6年级</a>
+    <a href="planner.html" class="">每日计划</a>
+  </div>
+</div>
+
+<script>
+function openMenu(){document.getElementById('mobileMenu').classList.add('open');document.body.style.overflow='hidden';}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');document.body.style.overflow='';}
+function closeMenuOverlay(e){if(e.target===document.getElementById('mobileMenu'))closeMenu();}
+</script>
+
+</body>
+</html>

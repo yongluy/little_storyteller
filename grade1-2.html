@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>1–2年级故事库 · 小故事家</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+XiaoWei&family=Noto+Serif+SC:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#1a1a2e;--paper:#fdfaf4;--warm:#f5ede0;--accent:#e07b39;--muted:#7a6f63;--border:rgba(26,26,46,0.1);--radius:16px;--shadow:0 4px 20px rgba(26,26,46,0.07)}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Noto Serif SC',serif;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background-image:radial-gradient(circle at 20% 30%,rgba(224,123,57,.05) 0%,transparent 50%);pointer-events:none;z-index:0}
+.container{max-width:880px;margin:0 auto;padding:0 20px;position:relative;z-index:1}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+
+/* NAV */
+nav{position:sticky;top:0;z-index:100;background:rgba(253,250,244,.93);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:11px 20px}
+.nav-inner{max-width:880px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.nav-logo{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;color:var(--ink);text-decoration:none}
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.nav-link{font-size:.76rem;font-family:'ZCOOL XiaoWei',serif;color:var(--muted);text-decoration:none;padding:4px 10px;border-radius:50px;transition:background .2s,color .2s}
+.nav-link:hover{background:var(--warm);color:var(--ink)}
+.nav-link.cur{background:var(--accent);color:#fff}
+
+
+/* PAGE HEADER */
+.page-header{padding:44px 20px 32px;text-align:center}
+.grade-badge{display:inline-flex;align-items:center;gap:6px;background:#fff5ee;border:1px solid rgba(224,123,57,.25);border-radius:50px;padding:5px 14px;font-family:'ZCOOL XiaoWei',serif;font-size:.76rem;color:var(--accent);letter-spacing:1.5px;margin-bottom:14px}
+.page-title{font-family:'Ma Shan Zheng',cursive;font-size:clamp(1.8rem,5vw,2.8rem);margin-bottom:8px}
+.page-sub{font-size:.9rem;color:var(--muted);line-height:1.8;max-width:500px;margin:0 auto 20px}
+.page-stats{display:flex;justify-content:center;gap:22px;flex-wrap:wrap}
+.ps-item{text-align:center}
+.ps-num{font-family:'Ma Shan Zheng',cursive;font-size:1.6rem;color:var(--accent);display:block}
+.ps-lbl{font-size:.75rem;color:var(--muted)}
+
+/* FRAMEWORK MINI */
+.framework-mini{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;margin-bottom:32px;box-shadow:var(--shadow)}
+.fm-title{font-family:'ZCOOL XiaoWei',serif;font-size:.9rem;color:var(--muted);margin-bottom:10px;letter-spacing:1px}
+.fm-steps{display:flex;gap:6px;flex-wrap:wrap}
+.fm-step{display:flex;align-items:center;gap:5px;background:var(--warm);border-radius:8px;padding:5px 10px;font-size:.78rem}
+.fm-dot{width:18px;height:18px;border-radius:50%;color:#fff;font-size:.65rem;display:flex;align-items:center;justify-content:center;font-family:'Ma Shan Zheng',cursive;flex-shrink:0}
+.d1{background:#e07b39}.d2{background:#e05656}.d3{background:#2eaa6e}
+
+/* FILTER */
+.filter-bar{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:28px;align-items:center}
+.filter-label{font-size:.8rem;color:var(--muted);font-family:'ZCOOL XiaoWei',serif;margin-right:3px}
+.ftag{background:#fff;border:1px solid var(--border);border-radius:50px;padding:5px 13px;font-size:.78rem;cursor:pointer;transition:all .2s;font-family:'ZCOOL XiaoWei',serif;color:var(--muted)}
+.ftag:hover{border-color:var(--accent);color:var(--accent)}
+.ftag.on{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* STORY GRID */
+.stories-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.story-card{background:#fff;border:1px solid var(--border);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);cursor:pointer;transition:transform .2s,box-shadow .2s;animation:fadeUp .4s ease backwards;position:relative}
+.story-card:hover{transform:translateY(-3px);box-shadow:0 10px 32px rgba(26,26,46,.11)}
+.story-card.hidden{display:none}
+.sc-num{position:absolute;top:14px;right:14px;font-family:'Ma Shan Zheng',cursive;font-size:.75rem;color:var(--muted);background:var(--warm);border-radius:50px;padding:2px 8px}
+.sc-emoji{font-size:2.2rem;display:block;margin-bottom:8px}
+.sc-dim{display:inline-block;font-size:.68rem;font-family:'ZCOOL XiaoWei',serif;padding:2px 8px;border-radius:50px;margin-bottom:7px;letter-spacing:.5px}
+.sc-title{font-family:'Ma Shan Zheng',cursive;font-size:1.1rem;margin-bottom:6px}
+.sc-preview{font-size:.8rem;color:var(--muted);line-height:1.65;margin-bottom:10px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.sc-tags{display:flex;gap:5px;flex-wrap:wrap}
+.sc-tag{font-size:.68rem;background:var(--warm);color:var(--muted);border-radius:5px;padding:2px 6px}
+.sc-open{display:inline-flex;align-items:center;gap:4px;font-size:.76rem;color:var(--accent);font-family:'ZCOOL XiaoWei',serif;margin-top:8px}
+
+/* DIM COLORS */
+.dim-zr{background:#e8f5e9;color:#2e7d32}
+.dim-yy{background:#e3f2fd;color:#1565c0}
+.dim-yq{background:#fce4ec;color:#880e4f}
+.dim-lj{background:#ede7f6;color:#4527a0}
+.dim-wh{background:#fff3e0;color:#e65100}
+.dim-qx{background:#fce4ec;color:#c62828}
+.dim-jt{background:#f3e5f5;color:#6a1b9a}
+.dim-kx{background:#e0f2f1;color:#00695c}
+.dim-cy{background:#fff8e1;color:#f57f17}
+.dim-gp{background:#efebe9;color:#4e342e}
+.dim-sz{background:#e8eaf6;color:#283593}
+.dim-ls{background:#fafafa;color:#424242}
+
+/* MODAL */
+.overlay{display:none;position:fixed;inset:0;background:rgba(10,10,20,.5);z-index:200;align-items:flex-start;justify-content:center;padding:20px;overflow-y:auto}
+.overlay.open{display:flex}
+.modal{background:var(--paper);border-radius:20px;padding:28px;max-width:620px;width:100%;margin:auto;position:relative;box-shadow:0 20px 60px rgba(10,10,20,.2);animation:fadeUp .3s ease}
+.modal-close{position:absolute;top:16px;right:16px;width:32px;height:32px;background:var(--warm);border:none;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--muted)}
+.modal-close:hover{background:var(--accent);color:#fff}
+.modal-num{font-family:'ZCOOL XiaoWei',serif;font-size:.75rem;color:var(--muted);margin-bottom:4px}
+.modal-emoji{font-size:2.8rem;display:block;margin-bottom:8px}
+.modal-title{font-family:'Ma Shan Zheng',cursive;font-size:1.7rem;margin-bottom:12px}
+.modal-dim{display:inline-block;font-size:.72rem;font-family:'ZCOOL XiaoWei',serif;padding:3px 10px;border-radius:50px;margin-bottom:16px}
+
+/* story sections */
+.story-section{margin-bottom:16px}
+.ss-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+.ss-icon{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;flex-shrink:0}
+.ss-step{font-family:'ZCOOL XiaoWei',serif;font-size:.82rem;color:var(--muted)}
+.ss-name{font-family:'ZCOOL XiaoWei',serif;font-size:.95rem;color:var(--ink)}
+.ss-body{font-size:.9rem;line-height:1.85;color:var(--ink)}
+
+/* guide box */
+.guide-box{background:var(--warm);border-radius:12px;padding:14px 16px;margin-top:16px}
+.guide-title{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;color:var(--accent);margin-bottom:8px}
+.guide-q{font-size:.83rem;line-height:1.7;color:var(--ink);margin-bottom:4px}
+.guide-q::before{content:"❓ "}
+
+/* retell box */
+.retell-box{background:#eefff5;border:1px solid rgba(46,170,110,.2);border-radius:12px;padding:14px 16px;margin-top:12px}
+.retell-title{font-family:'ZCOOL XiaoWei',serif;font-size:.85rem;color:#2eaa6e;margin-bottom:8px}
+.retell-step{display:flex;align-items:center;gap:7px;font-size:.82rem;line-height:1.6;margin-bottom:4px;color:var(--ink)}
+.retell-dot{width:16px;height:16px;border-radius:50%;background:#2eaa6e;color:#fff;font-size:.6rem;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Ma Shan Zheng',cursive}
+
+/* nav arrows in modal */
+.modal-nav{display:flex;justify-content:space-between;margin-top:20px;gap:10px}
+.mnav-btn{flex:1;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-family:'ZCOOL XiaoWei',serif;font-size:.82rem;cursor:pointer;color:var(--muted);transition:all .2s;text-align:center}
+.mnav-btn:hover{border-color:var(--accent);color:var(--accent)}
+.mnav-btn:disabled{opacity:.35;cursor:default}
+
+/* empty */
+.empty{text-align:center;padding:48px 20px;color:var(--muted);font-size:.9rem}
+
+footer{text-align:center;padding:32px 20px;font-size:.78rem;color:var(--muted);border-top:1px solid var(--border);margin-top:40px}
+footer a{color:var(--accent);text-decoration:none}
+
+/* ── MOBILE NAV FIX ── */
+.nav-links{display:flex;gap:5px;flex-wrap:wrap}
+.hamburger{display:none;background:none;border:1px solid var(--border);border-radius:8px;padding:5px 9px;cursor:pointer;font-size:1.1rem;color:var(--ink)}
+.mobile-menu{display:none;position:fixed;inset:0;background:rgba(10,10,20,.45);z-index:999}
+.mobile-menu.open{display:block}
+.mobile-menu-inner{position:absolute;top:0;right:0;width:220px;height:100%;background:var(--paper);padding:60px 20px 20px;box-shadow:-4px 0 24px rgba(10,10,20,.12);display:flex;flex-direction:column;gap:6px}
+.mobile-menu-inner a{font-family:'ZCOOL XiaoWei',serif;font-size:1rem;color:var(--ink);text-decoration:none;padding:10px 14px;border-radius:10px;transition:background .2s}
+.mobile-menu-inner a:hover,.mobile-menu-inner a.cur{background:var(--warm)}
+.mobile-close{position:absolute;top:16px;right:16px;background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--muted)}
+@media(max-width:560px){
+  .nav-links{display:none!important}
+  .hamburger{display:block}
+}
+
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="index.html" class="nav-logo">📖 小故事家</a>
+    <button class="hamburger" onclick="openMenu()" aria-label="菜单">☰</button>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link">首页</a>
+      <a href="grade1-2.html" class="nav-link cur">1–2年级</a>
+      <a href="grade3-4.html" class="nav-link">3–4年级</a>
+      <a href="grade5-6.html" class="nav-link">5–6年级</a>
+      <a href="planner.html" class="nav-link">每日计划</a>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <div class="container">
+    <div class="grade-badge">🌱 1–2 年级 · 萌芽故事家</div>
+    <div class="page-title">30 个好故事，讲给你听</div>
+    <div class="page-sub">每个故事用「背景→问题→结果」三步来讲，简单清楚。家长引导，孩子跟着说，慢慢就会自己讲啦！</div>
+    <div class="page-stats">
+      <div class="ps-item"><span class="ps-num">30</span><span class="ps-lbl">个故事</span></div>
+      <div class="ps-item"><span class="ps-num">12</span><span class="ps-lbl">个维度</span></div>
+      <div class="ps-item"><span class="ps-num">3</span><span class="ps-lbl">步框架</span></div>
+      <div class="ps-item"><span class="ps-num">5–8</span><span class="ps-lbl">分钟/天</span></div>
+    </div>
+  </div>
+</div>
+
+<div style="height:1px;background:var(--border)"></div>
+
+<div style="padding:24px 0 0">
+  <div class="container">
+
+    <!-- Framework mini reminder -->
+    <div class="framework-mini">
+      <div class="fm-title">📐 本年级使用框架（简化三步）</div>
+      <div class="fm-steps">
+        <div class="fm-step"><div class="fm-dot d1">①</div><span>🌍 背景 — 谁？在哪？</span></div>
+        <div class="fm-step"><div class="fm-dot d2">②</div><span>😟 问题 — 遇到什么麻烦？</span></div>
+        <div class="fm-step"><div class="fm-dot d3">③</div><span>🏆 结果 — 最后怎样了？</span></div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">筛选维度：</span>
+      <button class="ftag on" data-dim="all" onclick="filter(this)">全部</button>
+      <button class="ftag" data-dim="自然与生命" onclick="filter(this)">🌱 自然</button>
+      <button class="ftag" data-dim="友谊与合作" onclick="filter(this)">🤝 友谊</button>
+      <button class="ftag" data-dim="勇气与成长" onclick="filter(this)">💪 勇气</button>
+      <button class="ftag" data-dim="逻辑与解题" onclick="filter(this)">🧠 逻辑</button>
+      <button class="ftag" data-dim="文化与多元" onclick="filter(this)">🌍 文化</button>
+      <button class="ftag" data-dim="情绪与同理心" onclick="filter(this)">❤️ 情绪</button>
+      <button class="ftag" data-dim="家庭与社区" onclick="filter(this)">🏠 家庭</button>
+      <button class="ftag" data-dim="科学与探索" onclick="filter(this)">🔬 科学</button>
+      <button class="ftag" data-dim="创意与想象" onclick="filter(this)">🎨 创意</button>
+      <button class="ftag" data-dim="公平与责任" onclick="filter(this)">⚖️ 公平</button>
+      <button class="ftag" data-dim="数字与科技" onclick="filter(this)">🖥️ 科技</button>
+      <button class="ftag" data-dim="历史与传统" onclick="filter(this)">🏛️ 历史</button>
+    </div>
+
+    <!-- Grid -->
+    <div class="stories-grid" id="grid"></div>
+    <div class="empty" id="empty" style="display:none">没有找到该维度的故事</div>
+
+  </div>
+</div>
+
+<!-- MODAL -->
+<div class="overlay" id="overlay" onclick="overlayClick(event)">
+  <div class="modal" id="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body"></div>
+    <div class="modal-nav">
+      <button class="mnav-btn" id="btn-prev" onclick="navigate(-1)">← 上一个故事</button>
+      <button class="mnav-btn" id="btn-next" onclick="navigate(1)">下一个故事 →</button>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="container">
+    <p><a href="index.html">← 返回首页</a> · 小故事家 · 1–2年级故事库</p>
+  </div>
+</footer>
+
+<script>
+const DIM_COLOR = {
+  "自然与生命":"dim-zr","友谊与合作":"dim-yy","勇气与成长":"dim-yq",
+  "逻辑与解题":"dim-lj","文化与多元":"dim-wh","情绪与同理心":"dim-qx",
+  "家庭与社区":"dim-jt","科学与探索":"dim-kx","创意与想象":"dim-cy",
+  "公平与责任":"dim-gp","数字与科技":"dim-sz","历史与传统":"dim-ls"
+};
+const DIM_EMOJI = {
+  "自然与生命":"🌱","友谊与合作":"🤝","勇气与成长":"💪","逻辑与解题":"🧠",
+  "文化与多元":"🌍","情绪与同理心":"❤️","家庭与社区":"🏠","科学与探索":"🔬",
+  "创意与想象":"🎨","公平与责任":"⚖️","数字与科技":"🖥️","历史与传统":"🏛️"
+};
+const STEP_COLORS = ["#e07b39","#e05656","#2eaa6e"];
+
+const stories = [
+  /* 1 - 自然与生命 */
+  {
+    id:1, emoji:"🐛", dim:"自然与生命", title:"毛毛虫的翅膀梦",
+    tags:["成长","变化","坚持"],
+    preview:"小毛毛虫豆豆每天看着蝴蝶飞，心里有一个大大的梦想……",
+    bg:"森林里有一条小毛毛虫叫豆豆。她住在一片大叶子下面，每天看着蝴蝶在花丛里飞来飞去。",
+    problem:"豆豆最大的梦想是能飞起来，可是她只有小小的腿，根本飞不了。小伙伴们说：「你是虫子，永远都飞不起来！」豆豆很难过。",
+    action:"豆豆没有放弃。她每天努力吃叶子积累力量，然后勇敢地把自己裹进了一个茧里。黑暗中她等啊等，有时候很害怕，但还是坚持住了。",
+    twist:"有一天，茧突然破了！豆豆从里面钻出来，发现背上长出了两片美丽的彩色翅膀！",
+    result:"豆豆变成了一只漂亮的蝴蝶，飞过了整片森林。她学到：改变需要勇气和等待，但一定会来。",
+    guide:["豆豆住在哪里？她的梦想是什么？","为什么豆豆把自己裹进了茧里？","你有没有做到过一件以前觉得很难的事？"],
+    retell:["豆豆是一只住在森林里的……","她遇到的麻烦是……","最后她变成了……"]
+  },
+  /* 2 - 自然与生命 */
+  {
+    id:2, emoji:"🌱", dim:"自然与生命", title:"小树苗找阳光",
+    tags:["自然","坚持","希望"],
+    preview:"大石头压住了小树苗，它还能长大吗？",
+    bg:"山坡上有一颗小树苗，她刚刚从土里钻出来，嫩嫩的、绿绿的。旁边有一块大石头。",
+    problem:"大石头挡住了太阳，小树苗一直照不到光，叶子变得有点黄。她好想快快长大，可是怎么也长不高。",
+    action:"小树苗想了又想，决定把根往旁边弯，再把小枝往石头边缝里伸过去，一点一点向着有光的地方靠近。",
+    twist:"有一天下了大雨，雨水把石头旁边的泥土冲松了，石头滚开了一点点——阳光终于照进来了！",
+    result:"小树苗喝到了阳光，绿油油地长高了。她懂得：只要一直朝着光走，总有一天会到达。",
+    guide:["小树苗的麻烦是什么？","她是怎么做的？","你遇到困难时，会怎么想办法？"],
+    retell:["山坡上有一棵……","它的麻烦是……","最后它……"]
+  },
+  /* 3 - 自然与生命 */
+  {
+    id:3, emoji:"🐸", dim:"自然与生命", title:"青蛙宝宝怕冬天",
+    tags:["自然","季节","勇气"],
+    preview:"冬天要来了，小青蛙第一次要冬眠，他好害怕……",
+    bg:"池塘边，小青蛙呱呱刚出生没多久。秋天到了，叶子变黄了，风越来越凉。",
+    problem:"妈妈说：「冬天要来了，我们要睡一个长长的觉，叫冬眠。」呱呱从没睡过那么久，心里很害怕：「睡着了还能醒来吗？」",
+    action:"妈妈陪他去找了一个温暖的泥洞，给他盖上厚厚的泥土，还唱了一首摇篮曲。呱呱闭上眼睛，慢慢平静下来。",
+    twist:"呱呱做了一个好长好长的梦，梦里全是春天的荷花和飞舞的蜻蜓。然后他感觉脸上有阳光……",
+    result:"春天来了！呱呱睁开眼睛，精神抖擞。他跳出泥洞，看见了绿油油的荷叶，开心地叫：「呱呱！我醒了！」",
+    guide:["呱呱为什么害怕？","妈妈是怎么帮助他的？","你睡觉前害怕过什么？妈妈怎么帮你的？"],
+    retell:["小青蛙呱呱住在……","他遇到的问题是……","冬天过去后他……"]
+  },
+  /* 4 - 友谊与合作 */
+  {
+    id:4, emoji:"🐻", dim:"友谊与合作", title:"两只小熊的玩具",
+    tags:["分享","矛盾","和解"],
+    preview:"两只熊都想玩同一个玩具，谁也不让谁……",
+    bg:"森林里有两只小熊：大毛和小毛。他们是好朋友，住在同一条小河边。",
+    problem:"有一天，他们同时看上了同一个玩具小车，都不肯让。两个人拉来拉去，小车差点被扯坏，两个人都生气了，背对背坐着不说话。",
+    action:"河里的老鱼爷爷游过来问：「你们谁先玩，谁后玩，说好了呢？」两只熊想了想，决定用猜拳来决定顺序。",
+    twist:"大毛猜赢了先玩，可是他玩着玩着觉得一个人玩没意思，就走过去叫小毛：「你来做司机，我做乘客好不好？」",
+    result:"两只熊一起玩小车，笑得比刚才更开心了。他们明白：一起玩比一个人玩有趣多了。",
+    guide:["两只熊为什么吵架？","他们怎么解决的？","你和朋友吵架过吗？后来怎么好了？"],
+    retell:["大毛和小毛住在……","他们的麻烦是……","最后他们……"]
+  },
+  /* 5 - 友谊与合作 */
+  {
+    id:5, emoji:"🐧", dim:"友谊与合作", title:"新来的小企鹅",
+    tags:["接纳","友善","新朋友"],
+    preview:"小企鹅从很远的地方搬来，没有朋友，怎么办？",
+    bg:"雪地幼儿园来了一个新同学——小企鹅菲菲。她从南极搬来，说话有点不一样，走路也摇摇摆摆的。",
+    problem:"其他小动物觉得菲菲走路太好笑了，都躲着她不理她。菲菲一个人站在角落里，眼圈都红了。",
+    action:"小松鼠冬冬走过去说：「你好，我叫冬冬，你叫什么名字？」菲菲吃惊地看着他，然后慢慢笑了。",
+    twist:"体育课上要溜冰，所有小动物都摔倒了！只有菲菲在冰上走得稳稳的——原来她在南极天天走冰，是溜冰高手！",
+    result:"菲菲教大家怎么在冰上走，大家都学会了。从此菲菲有了很多朋友，大家都爱和她玩。",
+    guide:["大家一开始为什么不理菲菲？","冬冬做了什么？","你们班有没有新来的同学？你们是怎么做的？"],
+    retell:["雪地幼儿园来了……","她的麻烦是……","后来……"]
+  },
+  /* 6 - 友谊与合作 */
+  {
+    id:6, emoji:"🐦", dim:"友谊与合作", title:"帮助受伤的小鸟",
+    tags:["帮助","关爱","责任"],
+    preview:"小花发现了一只受伤的鸟，她能帮上忙吗？",
+    bg:"小女孩小花在院子里玩，突然发现草丛里有一只小鸟，翅膀弯弯的，动不了。",
+    problem:"小鸟受伤了，飞不起来，眼睛水汪汪的。小花想帮它，可是她不知道该怎么做，也不敢直接去碰。",
+    action:"小花跑去问爷爷。爷爷戴上手套，轻轻把小鸟放进装了棉花的盒子里，然后给它喂了点水。",
+    twist:"第二天，小花去看小鸟，小鸟竟然能站起来了，一双小眼睛看着她，好像在说谢谢。",
+    result:"一个星期后，小鸟的翅膀好了，扑扑扑飞走了。小花站在院子里目送它，心里暖暖的。",
+    guide:["小花发现了什么？她为什么没有直接去碰？","小花和爷爷是怎么帮助小鸟的？","如果你发现一只受伤的小动物，你会怎么做？"],
+    retell:["小花在院子里发现了……","她的问题是……","最后小鸟……"]
+  },
+  /* 7 - 勇气与成长 */
+  {
+    id:7, emoji:"🦁", dim:"勇气与成长", title:"不敢咆哮的小狮子",
+    tags:["自信","勇气","接受自己"],
+    preview:"小狮子乐乐发不出大叫声，他好羞愧，不想出去玩了……",
+    bg:"大草原上，小狮子乐乐刚满六岁。狮子家族住在一块大岩石上，每天练习咆哮。",
+    problem:"乐乐的声音又细又小，每次练习只能发出「喵喵」的声音，其他狮子都哈哈大笑。乐乐太羞愧了，不敢出去玩。",
+    action:"老奶奶狮子悄悄告诉乐乐：「不要模仿别人，找到你自己的声音。」乐乐发现自己有一对超级大耳朵，能听到很远很远的声音！",
+    twist:"有一天，一头鬣狗悄悄靠近了睡着的狮群！只有乐乐的耳朵听见了——他深吸一口气，发出了有生以来最大的一声吼！",
+    result:"狮群被唤醒，鬣狗逃跑了。大家才发现乐乐有神奇的耳朵。从此乐乐成了狮群的「预警哨兵」，大家都很尊敬他。",
+    guide:["乐乐为什么不开心？","老奶奶狮子对他说了什么？","你有没有觉得自己不如别人的地方？那个地方有没有可能是特别的优点？"],
+    retell:["小狮子乐乐住在……","他遇到的麻烦是……","最后他……"]
+  },
+  /* 8 - 勇气与成长 */
+  {
+    id:8, emoji:"🎭", dim:"勇气与成长", title:"第一次上台表演",
+    tags:["紧张","勇气","克服恐惧"],
+    preview:"明明要第一次上台唱歌了，腿都在抖……",
+    bg:"学校要开联欢会，一年级小朋友明明被选中上台独唱一首歌。",
+    problem:"明明一想到那么多人看着自己，就心跳加速，腿发抖，甚至想跟老师说「我不去了」。",
+    action:"爸爸陪他在家里一次次练习，还让他对着镜子唱，教他：「上台前深呼吸三次，想象观众都是熟悉的家人。」",
+    twist:"上台那一刻，明明的脑袋一片空白，可是音乐响起来……他的嘴巴自动开始唱了！",
+    result:"明明唱完了整首歌。台下响起了掌声，他脸红红地鞠了一个躬，心里又骄傲又开心。",
+    guide:["明明为什么不想上台？","爸爸教了他什么方法？","你有没有做过紧张的事？你怎么克服的？"],
+    retell:["明明要参加……","他遇到的问题是……","表演结束后他感觉……"]
+  },
+  /* 9 - 勇气与成长 */
+  {
+    id:9, emoji:"⛰️", dim:"勇气与成长", title:"爬不上去的山坡",
+    tags:["坚持","失败","再试一次"],
+    preview:"小东想爬到山顶，可是爬了三次都滑下来了……",
+    bg:"郊游那天，小东看到一个长满草的斜坡，非常想爬到顶上去。",
+    problem:"小东试了一次，滑下来了。试了第二次，还是滑下来了。第三次也失败了，膝盖还蹭破了皮。他想放弃了。",
+    action:"同学小雨说：「我们换一个地方试试，从有石头的那边爬，可以踩石头。」他们找到了一条有石头可以踩的路线。",
+    twist:"小东踩着石头一步一步往上走，走到一半腿有点酸，但抬头看见顶上不远了，深吸一口气继续走。",
+    result:"小东站在山顶，俯瞰整片草地，风吹来，好舒服。他举起双手大喊：「我上来了！」这是他这辈子最开心的一刻之一。",
+    guide:["小东失败了几次？他为什么想放弃？","小雨给了什么建议？","你有没有失败好几次还坚持下去的经历？"],
+    retell:["郊游时，小东看见了……","他遇到的困难是……","最后他……"]
+  },
+  /* 10 - 逻辑与解题 */
+  {
+    id:10, emoji:"🥕", dim:"逻辑与解题", title:"谁偷走了胡萝卜？",
+    tags:["推理","观察","找线索"],
+    preview:"兔子阿土的胡萝卜不见了，到底是谁拿走的？",
+    bg:"兔子阿土在院子里种了三根大胡萝卜。有一天早上起来，发现少了一根。",
+    problem:"阿土很伤心，那是他种了好久的胡萝卜。他要找出是谁拿走的。",
+    action:"阿土去问了邻居们。松鼠说他在睡觉；刺猬说她在找虫子；乌龟说他在散步——但乌龟的嘴巴边有一点点泥巴。",
+    twist:"阿土看见院子里有一串小小的脚印，一直走到了乌龟家门口，门口的地上还有一片胡萝卜叶子！",
+    result:"乌龟低下头说：「对不起，我太饿了，应该先来问你的。」阿土原谅了他，两个人一起把胡萝卜吃掉了。",
+    guide:["阿土怎么找到线索的？","你觉得线索有哪几个？","你生活中有没有像侦探一样找到东西的经历？"],
+    retell:["阿土发现……","他去调查……","最后他发现……"]
+  },
+  /* 11 - 逻辑与解题 */
+  {
+    id:11, emoji:"🤖", dim:"逻辑与解题", title:"迷路的小机器人",
+    tags:["方向","推理","帮助"],
+    preview:"小机器人走着走着，不知道该往左还是往右了……",
+    bg:"在科技小镇，有一个小机器人叫豆豆机。他负责每天给小镇送信。",
+    problem:"有一天豆豆机走到一个新地方，地图上没有这条路。他站在路口，不知道该往左还是往右，急得转圈圈。",
+    action:"一个小朋友走过来说：「太阳在西边，邮局在太阳落山的方向，所以要往西走。」豆豆机的电脑里想了想，认为这很有道理！",
+    twist:"豆豆机往西走了一会儿，发现前面有一条很宽的河，过不去！正着急，一艘小船出现了。",
+    result:"船夫把豆豆机送过了河。豆豆机成功把信送到了，还把这条新路记在了地图里，下次就不会迷路了。",
+    guide:["豆豆机的问题是什么？","小朋友用什么方法帮助他判断方向？","你迷路过吗？你怎么找到路的？"],
+    retell:["豆豆机是一个……","他遇到的麻烦是……","最后他……"]
+  },
+  /* 12 - 文化与多元 */
+  {
+    id:12, emoji:"🏮", dim:"文化与多元", title:"奶奶的家乡味道",
+    tags:["家乡","传统","理解"],
+    preview:"奶奶做的食物有一股奇怪的味道，小亮一开始不喜欢……",
+    bg:"小亮的奶奶从湖南乡下来了，带来了一罐腌辣椒，整个厨房都飘着酸辣的味道。",
+    problem:"小亮觉得味道太奇怪了，捂着鼻子跑开了，说：「不想吃！」奶奶的脸有点失落。",
+    action:"爸爸悄悄告诉小亮：「这个腌辣椒是奶奶做了几十年的手艺，她想把家乡的味道带给你。」小亮想了想，决定试一口。",
+    twist:"一口下去——竟然是酸酸辣辣的，很开胃！小亮一下子多吃了两碗饭！",
+    result:"小亮跑去抱住奶奶说：「奶奶，这个太好吃了！你能教我做吗？」奶奶笑得眼睛弯弯的。",
+    guide:["小亮一开始为什么不喜欢？","爸爸说了什么让他改变了主意？","你有没有一开始不喜欢、后来很喜欢的食物？"],
+    retell:["奶奶带来了……","小亮的感受先是……后来……","最后……"]
+  },
+  /* 13 - 文化与多元 */
+  {
+    id:13, emoji:"🎊", dim:"文化与多元", title:"搬来的新邻居",
+    tags:["接纳","不同","友善"],
+    preview:"新邻居说话和大家不一样，小桥要不要去打招呼？",
+    bg:"向阳小区来了一家新邻居。他们来自很远的地方，妈妈做饭总飘来浓浓的香料味。",
+    problem:"新邻居的小女孩米拉每天一个人坐在楼梯口，没有人跟她说话，因为大家觉得她「不一样」。米拉眼睛红红的。",
+    action:"小桥鼓起勇气走过去，看见米拉在画画，画里有沙漠、骆驼和五颜六色的市场，美极了。小桥说：「你画得好漂亮！」",
+    twist:"小区要举办节日表演，大家愁没有节目。米拉拿出了家乡的彩色头巾和小手鼓，说她能教大家跳家乡的舞！",
+    result:"表演那天米拉最受欢迎。大家尝了她妈妈的香料饼干，都说好吃。米拉终于有了很多新朋友。",
+    guide:["米拉一开始为什么没有朋友？","小桥怎么做的？","你们班有没有来自其他地方的同学？你们玩在一起吗？"],
+    retell:["米拉是一个……","她的麻烦是……","后来……"]
+  },
+  /* 14 - 情绪与同理心 */
+  {
+    id:14, emoji:"😤", dim:"情绪与同理心", title:"小兔子发脾气了",
+    tags:["情绪","生气","沟通"],
+    preview:"小兔子把积木推倒了，哭着跑进了房间……",
+    bg:"下雨天，小兔子米米在家里玩积木，搭了好高好高的塔。",
+    problem:"弟弟跑过来一下子把塔撞倒了，米米气得大叫，把弟弟推倒在地，然后哭着跑进房间把门关上。",
+    action:"妈妈敲门说：「我知道你很生气。生气了可以来告诉妈妈，但是推人是不对的。」米米在里面想了一会儿。",
+    twist:"米米慢慢打开门。她想起来，弟弟是不小心的，不是故意的，弟弟也在外面哭。",
+    result:"米米出来抱了抱弟弟说：「对不起，我推你了。不过你也不能撞我的积木。」弟弟点点头。他们重新搭了一座更大的塔。",
+    guide:["米米为什么生气？她做了什么不好的事？","妈妈说了什么？","你生气的时候通常会做什么？"],
+    retell:["米米在家里……","发生了……她很生气……","最后她和弟弟……"]
+  },
+  /* 15 - 情绪与同理心 */
+  {
+    id:15, emoji:"🐨", dim:"情绪与同理心", title:"找不到妈妈的小熊",
+    tags:["害怕","安慰","陪伴"],
+    preview:"小熊在超市找不到妈妈了，他好害怕……",
+    bg:"周末，妈妈带小熊去超市买东西。超市里好多人，货架又高又密。",
+    problem:"小熊转身一看，妈妈不见了！他大叫「妈妈！」没人答应。他越走越急，开始哭起来。",
+    action:"一个超市阿姨蹲下来说：「别怕，跟我来，我们去广播找妈妈。」小熊拉着阿姨的手，走到了广播室。",
+    twist:"广播喇叭里传出了：「请小熊的妈妈去服务台。」才过了一分钟，妈妈气喘吁吁地跑来了！",
+    result:"妈妈把小熊紧紧抱住，两个人都哭了。妈妈说：「对不起宝贝，妈妈没有看好你。」他们说好以后走散了要原地等待。",
+    guide:["小熊找不到妈妈时，他怎么做的？","阿姨是怎么帮助他的？","如果你和爸爸妈妈走散了，你会怎么做？"],
+    retell:["小熊和妈妈去……","突然……","最后……"]
+  },
+  /* 16 - 情绪与同理心 */
+  {
+    id:16, emoji:"🎨", dim:"情绪与同理心", title:"嫉妒画画好的同学",
+    tags:["嫉妒","接纳","努力"],
+    preview:"为什么小艺画的总比我好？小莉心里很不舒服……",
+    bg:"美术课上，小莉画了一幅她觉得很好的花朵，老师却一直夸同学小艺的画更漂亮。",
+    problem:"小莉心里很不舒服，觉得不公平，甚至不想和小艺说话了。",
+    action:"妈妈问小莉：「你有没有问过小艺她怎么画的？」小莉没有想到这个。第二天她鼓起勇气问了小艺。",
+    twist:"小艺说：「我每天放学都画一幅！我画坏了好多张呢，你要看吗？」小莉看到小艺画坏的那一摞纸，眼睛睁大了。",
+    result:"小莉明白了：原来不是小艺天生就好，是她练了很多很多次。小莉决定每天也画一幅，不再嫉妒了。",
+    guide:["小莉为什么不舒服？","妈妈的建议是什么？","你有没有嫉妒过别人？后来怎么了？"],
+    retell:["美术课上……","小莉的感受是……","她问了小艺之后……"]
+  },
+  /* 17 - 家庭与社区 */
+  {
+    id:17, emoji:"✈️", dim:"家庭与社区", title:"爸爸出差了",
+    tags:["思念","家庭","视频"],
+    preview:"爸爸要出差一个月，小宝每天晚上都想他……",
+    bg:"小宝的爸爸要去很远的城市出差，要一个月才回来。爸爸拉着行李箱走的那天早上，小宝一直不放手。",
+    problem:"爸爸走后，小宝每天吃饭都没胃口，睡前总要看爸爸的照片。他太想念爸爸了。",
+    action:"妈妈教小宝用平板和爸爸视频通话。每天睡前，小宝都会给爸爸讲一个白天发生的有趣的事。",
+    twist:"有一天，小宝在幼儿园画了一幅画：爸爸在飞机上，自己在地上挥手，上面写了「爸爸快回来」。老师帮他拍了照片发给爸爸。",
+    result:"爸爸看到画，在视频里眼睛红了，说：「宝贝，我下周就回来了。」小宝把日子一天天画了叉，终于等到了爸爸回家的那天。",
+    guide:["小宝为什么吃饭没胃口？","他们每天怎么联系？","你有没有想念过某个人？你做了什么？"],
+    retell:["爸爸要出差了……","小宝很……","他们每天……"]
+  },
+  /* 18 - 家庭与社区 */
+  {
+    id:18, emoji:"📦", dim:"家庭与社区", title:"搬家的第一天",
+    tags:["变化","新环境","适应"],
+    preview:"搬到新家了，小鱼一点都不开心，她想念以前的家……",
+    bg:"小鱼的家搬到了一个新小区。新家更大更亮，可是小鱼不认识任何人，连一个朋友都没有。",
+    problem:"小鱼一个人坐在新家的阳台上，不想玩玩具，不想吃东西，只是看着窗外发呆，想念以前的小区。",
+    action:"妈妈带小鱼去了楼下的小花园，遇见了一个在荡秋千的小女孩。妈妈轻轻推了推小鱼：「去问问她叫什么名字？」",
+    twist:"小鱼走过去，小声问：「你叫什么名字？」那个小女孩跳下秋千：「我叫豆豆！你是新来的吗？我可以带你逛小区！」",
+    result:"小鱼跟着豆豆认识了小区里所有好玩的地方：滑梯、沙坑、还有一只胖胖的橘猫。小鱼心里暖暖的，觉得新家也挺好的。",
+    guide:["小鱼为什么不开心？","她是怎么认识豆豆的？","你有没有去过新地方，从不熟悉到喜欢上的经历？"],
+    retell:["小鱼的家搬到了……","她的感受是……","后来她……"]
+  },
+  /* 19 - 家庭与社区 */
+  {
+    id:19, emoji:"👵", dim:"家庭与社区", title:"照顾生病的奶奶",
+    tags:["关爱","责任","家人"],
+    preview:"奶奶发烧了，小云想帮忙，可是他能做什么呢？",
+    bg:"奶奶发烧了，躺在床上，脸红红的，说话没有力气。爸爸妈妈都出门上班了，家里只有小云和奶奶。",
+    problem:"小云很担心奶奶，可是他才7岁，不会做饭，也不会打针。他觉得自己什么都做不了，急得转圈。",
+    action:"小云想了想，做了几件他能做的事：倒了一杯温水递给奶奶，帮奶奶把被子盖好，还坐在床边轻声讲了一个故事。",
+    twist:"奶奶喝了水，听着故事，闭上了眼睛。小云以为她睡着了，刚想走，奶奶拉住他的手说：「小云，你真懂事，奶奶好多了。」",
+    result:"爸爸妈妈回来听说了，都夸小云。小云明白：哪怕只是陪在旁边，对生病的人也是很大的帮助。",
+    guide:["小云为什么觉得自己没用？","他做了哪些事来帮助奶奶？","你有没有照顾过家里生病的人？"],
+    retell:["奶奶生病了……","小云的问题是……","他做了……"]
+  },
+  /* 20 - 科学与探索 */
+  {
+    id:20, emoji:"🌧️", dim:"科学与探索", title:"为什么天会下雨？",
+    tags:["科学","好奇心","自然"],
+    preview:"雨从哪里来？小问号问了一个大问题……",
+    bg:"下雨天，小女孩问问坐在窗边，看着外面的雨发呆。",
+    problem:"问问突然问爸爸：「天上的雨水是从哪里来的？天上有一个大水桶吗？」爸爸笑了。",
+    action:"爸爸拿来一个锅，装了水，放在炉子上烧。问问看见水慢慢冒出了白烟，飘到了锅盖上，又变成小水珠滴下来。",
+    twist:"爸爸说：「地球上的水，被太阳晒热后变成水蒸气飞上天空，变成云，云太重了就变成雨落下来。」问问嘴巴张成了O形！",
+    result:"问问跑去窗边，望着天空的云说：「那些云，都是水变的！」她把这个发现画成了一幅图，贴在了房间里。",
+    guide:["问问的问题是什么？","爸爸用什么方法解释的？","你生活中有没有对什么感到好奇？"],
+    retell:["下雨天，问问……","她的问题是……","爸爸解释说……"]
+  },
+  /* 21 - 科学与探索 */
+  {
+    id:21, emoji:"🌱", dim:"科学与探索", title:"种子是怎么发芽的",
+    tags:["科学","观察","耐心"],
+    preview:"小向把种子种下去了，等了三天，什么都没有……",
+    bg:"自然课上，老师给每人发了几粒豆子，让大家回家种。小向把豆子种在了一个小花盆里，放在窗台上。",
+    problem:"第一天，什么都没有。第二天，还是什么都没有。第三天，小向着急了，把土扒开来看，豆子好像没有变化，他失望极了。",
+    action:"老师说：「种子在土里需要水和时间。别扒开土，那样会伤害它。」小向忍住了，每天只是浇水，耐心等待。",
+    twist:"第七天早上，小向一看——土里冒出了一个嫩嫩的小芽！绿色的，弯着腰，像个小问号。",
+    result:"小向激动地跑去叫妈妈来看。他学到：生命的生长需要时间，急是没用的，耐心才是最好的办法。",
+    guide:["小向为什么失望？他做了什么不对的事？","老师给了什么建议？","你有没有等待过一件事？等到了是什么感觉？"],
+    retell:["小向种下了……","他的麻烦是……","第七天他看到了……"]
+  },
+  /* 22 - 创意与想象 */
+  {
+    id:22, emoji:"🌈", dim:"创意与想象", title:"颜色逃跑了",
+    tags:["想象","合作","创意"],
+    preview:"画画王国里，所有颜色都跑出来大闹，世界变成泥色了！",
+    bg:"在一个画画王国里，所有颜色住在一个大颜料盒里，每天帮画家画美丽的世界。",
+    problem:"红色觉得自己最重要，跑出来把所有东西涂成红色。黄色不服气也跑了出来。蓝色也闹……最后所有颜色混在一起，世界变成了脏兮兮的泥色！",
+    action:"小画家找到每种颜色，认真告诉它们：「你代表热情，你代表天空，你代表大地……每一种颜色都是特别的。」",
+    twist:"正当所有颜色要回去的时候，泥色说：「我是大家混合生出来的，我也有家！」",
+    result:"小画家给泥色找了一个位置——画树干、土地、大象！泥色高兴极了。从此所有颜色都有了自己的位置，画出的世界更美了。",
+    guide:["颜色们为什么闹矛盾？","小画家怎么安慰它们的？","你觉得每种颜色代表什么？"],
+    retell:["画画王国里……","发生了……","最后……"]
+  },
+  /* 23 - 创意与想象 */
+  {
+    id:23, emoji:"🧸", dim:"创意与想象", title:"会说话的积木",
+    tags:["想象","创造","游戏"],
+    preview:"如果玩具会说话，它们会说什么？",
+    bg:"晚上所有人睡着后，小明的玩具箱里发生了一件神奇的事：玩具们开始说话了！",
+    problem:"积木大叔抱怨：「小明总是乱丢我们，我们住在玩具箱里好挤呀！」玩具们决定开个会来解决这个问题。",
+    action:"毛绒熊提议：「我们在小明睡觉时排好队，这样他明天就能看到我们想告诉他的话。」大家连夜排成了一个箭头，指着玩具架。",
+    twist:"第二天早上，小明一进房间，发现积木竟然排成了一个箭头！他揉揉眼睛，以为在做梦，然后把积木一个一个放上了架子。",
+    result:"玩具们再次开心地住在了宽敞的架子上。小明不知道发生了什么，但从此以后开始把玩具放整齐了，感觉好多了。",
+    guide:["积木大叔为什么抱怨？","玩具们想了什么办法？","你觉得你的玩具如果能说话，会说什么？"],
+    retell:["晚上，玩具们……","它们的麻烦是……","它们想出了……"]
+  },
+  /* 24 - 创意与想象 */
+  {
+    id:24, emoji:"🏰", dim:"创意与想象", title:"梦里的糖果城堡",
+    tags:["想象","梦","冒险"],
+    preview:"小糖在梦里走进了一座城堡，里面全是糖果……",
+    bg:"小糖吃了太多糖，睡觉时做了一个超级甜的梦：她站在一座城堡门口，门是巧克力做的，围墙是棒棒糖！",
+    problem:"城堡里住着一个棉花糖巨人，他不让任何人进来。他说：「这是我一个人的城堡，你们走开！」",
+    action:"小糖没有跑，她从口袋里掏出一颗她最喜欢的草莓糖，递给巨人说：「你想试试我带来的糖吗？」",
+    twist:"巨人接过糖放进嘴里，眼睛突然亮了：「这个味道……是我从来没有尝过的！」他想了想，慢慢把大门打开了。",
+    result:"巨人和小糖一起在城堡里分享糖果，笑声把城堡的窗户都震开了。小糖醒来，嘴角还挂着微笑。",
+    guide:["棉花糖巨人一开始为什么不让人进去？","小糖用什么方法打动了他？","你有没有做过很有趣的梦？"],
+    retell:["小糖梦见了……","她遇到了……","她怎么做……最后……"]
+  },
+  /* 25 - 公平与责任 */
+  {
+    id:25, emoji:"🏺", dim:"公平与责任", title:"谁打碎了花瓶",
+    tags:["诚实","责任","勇气"],
+    preview:"花瓶碎了，是谁打碎的？会不会被骂？",
+    bg:"客厅里有一个漂亮的花瓶，是外婆送的。妈妈最宝贝它了。",
+    problem:"小杰和小妹在屋子里追着跑，小杰不小心把花瓶碰到地上，碎了！小妹跑走了，小杰站在原地，心跳得很快，不知道要不要告诉妈妈。",
+    action:"小杰把碎片小心地扫到一起，然后站在妈妈面前，声音颤抖地说：「妈妈……花瓶是我碰碎的，对不起。」",
+    twist:"妈妈沉默了一会儿，问：「你是故意的吗？」小杰摇头。妈妈叹了口气，说：「谢谢你告诉我。」",
+    result:"妈妈没有骂他，只是说：「以后记得在室内不奔跑。」小杰心里的大石头落下来了，感觉轻松多了。他懂得：说实话比藏着更轻松。",
+    guide:["小杰一开始想做什么？他为什么改变了主意？","妈妈的反应让你意外吗？","你有没有做错事但诚实说出来的经历？"],
+    retell:["花瓶碎了……","小杰的问题是……","他告诉了妈妈……最后……"]
+  },
+  /* 26 - 公平与责任 */
+  {
+    id:26, emoji:"🚶", dim:"公平与责任", title:"排队插队的小猫",
+    tags:["公平","规则","讲理"],
+    preview:"小猫插队了，大家都不高兴，怎么解决？",
+    bg:"动物村里的冰淇淋车来了，大家都排起了长长的队伍。",
+    problem:"小猫跑来，不排队，直接挤到最前面说：「让我先买！」后面的小兔、小狗、小猪都不高兴了，开始大声抗议。",
+    action:"老爷爷乌龟走过来说：「小猫，你知道为什么要排队吗？」小猫耸耸肩说：「不知道。」乌龟说：「因为大家都想买，排队是对每个人公平的方式。」",
+    twist:"小猫想了想，走回到队伍最后面站好。后面的动物们悄悄鼓起了掌。",
+    result:"小猫等了一会儿，终于买到了冰淇淋，吃起来特别甜，因为是自己排队等来的。他决定以后再也不插队了。",
+    guide:["小猫为什么插队？这样做对吗？","乌龟爷爷说了什么道理？","你有没有见过插队的情况？你觉得应该怎么办？"],
+    retell:["冰淇淋车来了……","小猫……","后来他……"]
+  },
+  /* 27 - 公平与责任 */
+  {
+    id:27, emoji:"📏", dim:"公平与责任", title:"借了不还的橡皮",
+    tags:["诚信","友谊","勇气"],
+    preview:"小田借了好朋友的橡皮，用完了不想还……",
+    bg:"小田向同桌好朋友小禾借了一块好看的橡皮，是一只粉色小兔子形状的。",
+    problem:"用完之后，小田喜欢上了这块橡皮，放进了自己的铅笔盒，假装忘记了。小禾问了一次，小田说：「不知道在哪里。」",
+    action:"小田当天晚上睡不着，脑子里一直有小禾问橡皮的样子。他想：「如果是我丢了橡皮，我会怎么样？」",
+    twist:"第二天，小田在书包里翻到了橡皮，鼓起勇气走向小禾，把橡皮递过去，低着头说：「我找到了……其实我一直知道在哪里，对不起。」",
+    result:"小禾接过橡皮，说：「谢谢你还给我，我们还是好朋友。」小田感觉心里干净多了，比拥有那块橡皮要好受很多。",
+    guide:["小田为什么睡不着？","他后来是怎么做的？","你有没有做过一件事，后来良心不安，主动去改正的？"],
+    retell:["小田借了……","他的问题是……","他后来决定……"]
+  },
+  /* 28 - 数字与科技 */
+  {
+    id:28, emoji:"📱", dim:"数字与科技", title:"小机器人学规则",
+    tags:["科技","规则","安全"],
+    preview:"家里来了一个小机器人，它什么都不懂，要怎么教它？",
+    bg:"小然家里来了一个家用小机器人，叫「豆豆」。它圆圆的，会跑来跑去，会开灯关灯，还会讲故事。",
+    problem:"可是豆豆不知道什么时候该安静，有时候在大家睡觉时突然大声唱歌，或者在小然做作业时一直说话，把大家弄得很烦。",
+    action:"小然决定教豆豆规则：「晚上9点以后要安静；我在写字时不说话；有人说停就停。」他把规则一条一条念给豆豆听。",
+    twist:"第二天，豆豆竟然自己加了一条：「当小然看起来难过的时候，我会问他是否需要帮助。」小然愣住了，笑了。",
+    result:"豆豆学会了规则，家里变得和谐多了。小然懂得：无论是人还是机器，都需要有规则，才能好好相处。",
+    guide:["豆豆的问题是什么？","小然教了它哪些规则？","你觉得用电子产品的时候，需要遵守什么规则？"],
+    retell:["家里来了一个……","它的麻烦是……","小然教它……"]
+  },
+  /* 29 - 数字与科技 */
+  {
+    id:29, emoji:"🔍", dim:"数字与科技", title:"网上看到的是真的吗？",
+    tags:["科技","辨别","思考"],
+    preview:"网上说吃一种神奇的糖可以飞起来，是真的吗？",
+    bg:"小朋友们在学校里流传着一个消息：「有一种糖吃了可以跳得很高，像飞起来一样！」据说是在网上看到的视频。",
+    problem:"很多小朋友都相信了，打算让爸妈去买。小真也很心动，但她有点疑惑：「真的有这种糖吗？」",
+    action:"小真回家问爸爸。爸爸说：「我们来查一查吧。」他们一起在靠谱的科学网站上搜索，发现根本没有这种糖——那个视频是用电脑特效做的。",
+    twist:"第二天小真把这件事告诉了同学们。有些人不信，说：「视频看起来是真的！」小真说：「视频可以用电脑做假，我们要查一查才能知道真假。」",
+    result:"大家慢慢接受了这个事实，老师也表扬了小真。小真懂得：看到有趣的消息，要先问「这是真的吗？」才能判断。",
+    guide:["同学们为什么相信那个消息？","小真和爸爸怎么查的？","你看到有趣的消息，会先想到怎么确认它是不是真的？"],
+    retell:["同学们说……","小真的问题是……","她和爸爸……最后……"]
+  },
+  /* 30 - 历史与传统 */
+  {
+    id:30, emoji:"🏮", dim:"历史与传统", title:"元宵节的灯谜",
+    tags:["传统","节日","智慧"],
+    preview:"元宵节猜灯谜，小亮猜了一个谜语，差点想不到答案……",
+    bg:"元宵节到了！公园里挂满了五颜六色的灯笼，每个灯笼下面都有一张红纸条，写着灯谜。",
+    problem:"小亮看中了一个金色大灯笼，灯谜是：「麻屋子，红帐子，里面住着白胖子。打一食物。」小亮想了好久想不出来，急得跺脚。",
+    action:"奶奶走过来悄悄说：「这个谜语奶奶小时候也猜过，你摸摸你的口袋，有没有吃过它？」小亮掏出口袋，发现一把花生！",
+    twist:"小亮看着花生：棕色的外壳（麻屋子）、红色的皮（红帐子）、白色的果仁（白胖子）！他一下子全明白了！",
+    result:"小亮把答案「花生」交给了管理员，拿到了那个金色大灯笼。他又去猜了三个灯谜，全部猜对了！他爱上了猜灯谜。",
+    guide:["这个灯谜的答案是什么？你猜到了吗？","奶奶给的提示是什么？","你知道还有哪些元宵节的习俗？"],
+    retell:["元宵节公园里……","小亮的麻烦是……","奶奶给了提示……最后……"]
+  }
+];
+
+let currentIdx = 0;
+let currentFilter = "all";
+
+/* ── RENDER CARDS ── */
+function renderCards() {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  let visible = 0;
+  stories.forEach((s, i) => {
+    const show = currentFilter === 'all' || s.dim === currentFilter;
+    const dc = DIM_COLOR[s.dim] || '';
+    const de = DIM_EMOJI[s.dim] || '';
+    const card = document.createElement('div');
+    card.className = 'story-card' + (show ? '' : ' hidden');
+    card.style.animationDelay = (i * 0.03) + 's';
+    card.innerHTML = `
+      <div class="sc-num">No.${s.id}</div>
+      <span class="sc-emoji">${s.emoji}</span>
+      <span class="sc-dim ${dc}">${de} ${s.dim}</span>
+      <div class="sc-title">${s.title}</div>
+      <div class="sc-preview">${s.preview}</div>
+      <div class="sc-tags">${s.tags.map(t => `<span class="sc-tag">${t}</span>`).join('')}</div>
+      <div class="sc-open">👉 点击阅读故事</div>`;
+    card.onclick = () => openStory(i);
+    grid.appendChild(card);
+    if (show) visible++;
+  });
+  document.getElementById('empty').style.display = visible === 0 ? 'block' : 'none';
+}
+
+/* ── FILTER ── */
+function filter(btn) {
+  document.querySelectorAll('.ftag').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  currentFilter = btn.dataset.dim;
+  renderCards();
+}
+
+/* ── MODAL ── */
+function openStory(idx) {
+  currentIdx = idx;
+  renderModal(idx);
+  document.getElementById('overlay').classList.add('open');
+  document.getElementById('modal').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+
+function renderModal(idx) {
+  const s = stories[idx];
+  const dc = DIM_COLOR[s.dim] || '';
+  const de = DIM_EMOJI[s.dim] || '';
+  const sc = STEP_COLORS;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="modal-num">第 ${s.id} 个故事 / 共 ${stories.length} 个</div>
+    <span class="modal-emoji">${s.emoji}</span>
+    <div class="modal-title">${s.title}</div>
+    <span class="modal-dim ${dc}">${de} ${s.dim}</span>
+
+    <div class="story-section">
+      <div class="ss-header">
+        <div class="ss-icon" style="background:${sc[0]};color:#fff">①</div>
+        <div><div class="ss-step">步骤①</div><div class="ss-name">🌍 背景 — 谁在哪里？</div></div>
+      </div>
+      <div class="ss-body">${s.bg}</div>
+    </div>
+
+    <div class="story-section">
+      <div class="ss-header">
+        <div class="ss-icon" style="background:${sc[1]};color:#fff">②</div>
+        <div><div class="ss-step">步骤②</div><div class="ss-name">😟 问题 — 遇到什么麻烦？</div></div>
+      </div>
+      <div class="ss-body">${s.problem}<br><br><span style="color:var(--muted);font-size:.82rem">💡 <em>行动参考：</em>${s.action}</span></div>
+    </div>
+
+    <div class="story-section">
+      <div class="ss-header">
+        <div class="ss-icon" style="background:${sc[2]};color:#fff">③</div>
+        <div><div class="ss-step">步骤③</div><div class="ss-name">🏆 结果 — 最后怎样了？</div></div>
+      </div>
+      <div class="ss-body">${s.result}</div>
+    </div>
+
+    <div class="guide-box">
+      <div class="guide-title">👨‍👩‍👧 家长引导提问</div>
+      ${s.guide.map(q => `<div class="guide-q">${q}</div>`).join('')}
+    </div>
+
+    <div class="retell-box">
+      <div class="retell-title">🎤 孩子复述提示（说说看）</div>
+      ${s.retell.map((r, i) => `<div class="retell-step"><div class="retell-dot">${i+1}</div><span>${r}</span></div>`).join('')}
+    </div>
+  `;
+  document.getElementById('btn-prev').disabled = idx === 0;
+  document.getElementById('btn-next').disabled = idx === stories.length - 1;
+}
+
+function navigate(dir) {
+  const newIdx = currentIdx + dir;
+  if (newIdx >= 0 && newIdx < stories.length) {
+    currentIdx = newIdx;
+    renderModal(newIdx);
+    document.getElementById('modal').scrollTop = 0;
+  }
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function overlayClick(e) {
+  if (e.target === document.getElementById('overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('overlay').classList.contains('open')) return;
+  if (e.key === 'Escape') closeModal();
+  if (e.key === 'ArrowRight') navigate(1);
+  if (e.key === 'ArrowLeft') navigate(-1);
+});
+
+renderCards();
+</script>
+
+<div class="mobile-menu" id="mobileMenu" onclick="closeMenuOverlay(event)">
+  <div class="mobile-menu-inner">
+    <button class="mobile-close" onclick="closeMenu()">✕</button>
+    <a href="index.html" class="">首页</a>
+    <a href="grade1-2.html" class="cur">1–2年级</a>
+    <a href="grade3-4.html" class="">3–4年级</a>
+    <a href="grade5-6.html" class="">5–6年级</a>
+    <a href="planner.html" class="">每日计划</a>
+  </div>
+</div>
+
+<script>
+function openMenu(){document.getElementById('mobileMenu').classList.add('open');document.body.style.overflow='hidden';}
+function closeMenu(){document.getElementById('mobileMenu').classList.remove('open');document.body.style.overflow='';}
+function closeMenuOverlay(e){if(e.target===document.getElementById('mobileMenu'))closeMenu();}
+</script>
+
+</body>
+</html>
