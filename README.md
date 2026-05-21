@@ -14,19 +14,12 @@
 └── README.md         本文件
 ```
 
-## 🚀 GitHub Pages 部署步骤
+## 🚀 如何使用
 
-1. 登录 [github.com](https://github.com)，点击右上角 **「+」→「New repository」**
-2. 仓库名填写：`xiaogushijia`（或任意名称）
-3. 选择 **Public**，点击 **「Create repository」**
-4. 点击 **「uploading an existing file」**，把以上5个HTML文件全部拖入上传
-5. 点击 **「Commit changes」**
-6. 进入仓库 **Settings → Pages**
-7. Source 选择 **「Deploy from a branch」**，Branch 选 **「main」**，目录选 **「/(root)」**
-8. 点击 **Save**，等待约1分钟
-9. 页面顶部会出现网址：`https://你的用户名.github.io/xiaogushijia/`
+1. 获取链接：https://yongluy.github.io/little_storyteller/index.html
+2. 把这个链接发到微信群，家长点击即可直接打开，无需任何安装。
+3. 有任何问题或建议，请留言给我
 
-把这个链接发到微信群，家长点击即可直接打开，无需任何安装。
 
 ## 内容概览
 
